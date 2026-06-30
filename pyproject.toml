@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "skillhub"
+version = "0.1.0"
+description = "The package manager for AI agent skills — install, compose, and publish skills for Claude Code, Cursor, Codex, and Gemini CLI"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [
+    { name = "Chandrashekar DP", email = "chandrudp29@gmail.com" }
+]
+keywords = [
+    "ai", "agents", "skills", "claude", "cursor", "codex", "gemini",
+    "llm", "claude-code", "package-manager"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.0.0",
+    "httpx>=0.27.0",
+    "pyyaml>=6.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/chandrudp29/skillhub"
+Repository = "https://github.com/chandrudp29/skillhub"
+Issues = "https://github.com/chandrudp29/skillhub/issues"
+Changelog = "https://github.com/chandrudp29/skillhub/blob/main/CHANGELOG.md"
+
+[project.scripts]
+skillhub = "skillhub.main:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["skillhub"]

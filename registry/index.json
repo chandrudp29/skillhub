@@ -1,0 +1,106 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-06-30",
+  "skills": [
+    {
+      "name": "research-agent",
+      "display_name": "Research Agent",
+      "description": "Multi-source deep research with synthesis and inline citations. Structured workflow: clarify, decompose, search, synthesize.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["research", "web", "synthesis", "citations", "analysis"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "rag-evaluator",
+      "display_name": "RAG Evaluator",
+      "description": "Evaluate RAG pipeline quality across faithfulness, relevance, and hallucination. Finds where your RAG breaks before users do.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["rag", "evaluation", "llm", "retrieval", "quality", "benchmarking"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "code-reviewer",
+      "display_name": "Code Reviewer",
+      "description": "Five-axis structured code review: correctness, security, performance, maintainability, test coverage. Severity-labeled findings.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["code-review", "security", "quality", "testing", "pull-request"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "debug-agent",
+      "display_name": "Debug Agent",
+      "description": "Systematic root cause analysis: build a feedback loop first, then hypothesize, instrument, fix. No guessing.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["debugging", "error-analysis", "root-cause", "testing"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "test-writer",
+      "display_name": "Test Writer",
+      "description": "Write thorough, meaningful tests — happy path, edge cases, error cases, integration. Tests that actually catch bugs.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["testing", "tdd", "unit-tests", "integration", "coverage"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "pr-summarizer",
+      "display_name": "PR Summarizer",
+      "description": "Generate clear pull request descriptions from diffs: what, why, how, test plan, and risks. Context-first, not diff-first.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["git", "pull-request", "documentation", "changelog"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "cost-tracker",
+      "display_name": "LLM Cost Tracker",
+      "description": "Track, estimate, and optimize LLM API costs across OpenAI, Anthropic, Bedrock, and Gemini. Finds your biggest cost drivers.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["llm", "cost", "optimization", "openai", "anthropic", "bedrock", "pricing"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "sql-agent",
+      "display_name": "SQL Agent",
+      "description": "Write, optimize, and explain SQL queries. Covers query plans, index strategy, schema design, and safety for PostgreSQL, MySQL, SQLite.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["sql", "database", "postgres", "performance", "schema"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "doc-generator",
+      "display_name": "Doc Generator",
+      "description": "Generate accurate README files, API docs, inline docstrings, and changelogs. Documentation developers actually read.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["documentation", "readme", "api-docs", "docstrings", "changelog"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    },
+    {
+      "name": "yc-job-tracker",
+      "display_name": "YC Job Tracker",
+      "description": "Track and score AI/ML engineering jobs at YC startups. Daily refresh, relevance scoring, and new-posting alerts.",
+      "version": "1.0.0",
+      "agents": ["claude", "cursor", "codex", "gemini"],
+      "tags": ["jobs", "yc", "ai-ml", "scraping", "career", "startup"],
+      "author": "chandrudp29",
+      "license": "MIT"
+    }
+  ]
+}

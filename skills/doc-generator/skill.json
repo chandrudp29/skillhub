@@ -1,0 +1,10 @@
+{
+  "name": "doc-generator",
+  "display_name": "Doc Generator",
+  "description": "Generate accurate, useful documentation — README files, API docs, docstrings, and changelogs.",
+  "version": "1.0.0",
+  "agents": ["claude", "cursor", "codex", "gemini"],
+  "tags": ["documentation", "readme", "api-docs", "docstrings", "changelog"],
+  "author": "chandrudp29",
+  "license": "MIT"
+}
