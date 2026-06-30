@@ -23,6 +23,32 @@ app = typer.Typer(
 )
 console = Console()
 
+__version__ = "0.1.0"
+
+
+def _suggest_similar(name: str, threshold: float = 0.6) -> list[str]:
+    """Find similar skill names for 'did you mean' suggestions."""
+    from difflib import SequenceMatcher
+    from .registry import list_all_skills
+
+    skills = list_all_skills()
+    suggestions = []
+    for skill in skills:
+        skill_name = skill["name"]
+        ratio = SequenceMatcher(None, name.lower(), skill_name.lower()).ratio()
+        if ratio >= threshold or name.lower() in skill_name.lower():
+            suggestions.append((ratio, skill_name))
+
+    # Sort by similarity and return top 3
+    suggestions.sort(reverse=True, key=lambda x: x[0])
+    return [s[1] for s in suggestions[:3]]
+
+
+def _version_callback(value: bool):
+    if value:
+        console.print(f"skillhub version {__version__}")
+        raise typer.Exit()
+
 AGENTS = ["claude", "cursor", "codex", "gemini"]
 AGENT_LABELS = {
     "claude": "[bold cyan]Claude Code[/]",
@@ -132,7 +158,11 @@ def info(
 
     skill = get_skill(name)
     if not skill:
-        console.print(f"[red]Skill '{name}' not found.[/] Try: [bold]skillhub search {name}[/]")
+        console.print(f"[red]Skill '{name}' not found.[/]")
+        suggestions = _suggest_similar(name)
+        if suggestions:
+            console.print(f"[yellow]Did you mean:[/] {', '.join(f'[cyan]{s}[/]' for s in suggestions)}")
+        console.print(f"\nTry: [bold]skillhub search {name}[/] or [bold]skillhub list[/]")
         raise typer.Exit(1)
 
     panel_content = Text()
@@ -164,7 +194,10 @@ def install(
     skill_meta = get_skill(name)
     if not skill_meta:
         console.print(f"[red]Error:[/] Skill '{name}' not found in registry.")
-        console.print(f"Try: [bold]skillhub search {name}[/]")
+        suggestions = _suggest_similar(name)
+        if suggestions:
+            console.print(f"[yellow]Did you mean:[/] {', '.join(f'[cyan]{s}[/]' for s in suggestions)}")
+        console.print(f"\nTry: [bold]skillhub search {name}[/] or [bold]skillhub list[/]")
         raise typer.Exit(1)
 
     agents_label = "all agents" if all_agents else AGENT_LABELS.get(agent, agent)
@@ -206,9 +239,26 @@ def install(
 def uninstall(
     name: str = typer.Argument(..., help="Skill name to remove"),
     agent: str = _agent_option(),
+    yes: bool = typer.Option(False, "--yes", "-y", help="Skip confirmation prompt"),
 ):
     """Remove an installed skill from your project."""
     from .installer import uninstall as _uninstall
+    from .adapters import get_install_path
+
+    # Check if skill exists first
+    path = get_install_path(agent, name, Path.cwd())
+    if not path.exists() and agent != "codex":
+        console.print(f"[yellow]Skill '{name}' not found in project.[/]")
+        console.print(f"Check installed skills: [bold]skillhub list --installed[/]")
+        raise typer.Exit(1)
+
+    # Show what will be removed and confirm
+    if not yes:
+        rel_path = path.relative_to(Path.cwd()) if path.is_absolute() else path
+        console.print(f"\n[bold]Will remove:[/] [dim]{rel_path}[/]")
+        if not typer.confirm("Continue?", default=True):
+            console.print("[dim]Cancelled.[/]")
+            raise typer.Exit(0)
 
     console.print(f"\n[bold]Removing[/] [cyan]{name}[/]...\n")
     removed = _uninstall(name, agent=agent)
@@ -343,7 +393,10 @@ def publish(
 
 
 @app.callback(invoke_without_command=True)
-def main(ctx: typer.Context):
+def main(
+    ctx: typer.Context,
+    version: bool = typer.Option(False, "--version", "-v", callback=_version_callback, is_eager=True, help="Show version"),
+):
     """
     [bold cyan]skillhub[/] — the package manager for AI agent skills.
 
