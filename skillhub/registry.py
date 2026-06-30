@@ -28,21 +28,32 @@ def _bundled_index() -> dict:
 def fetch_index(force: bool = False) -> dict:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+    bundled = _bundled_index()
+
     if not force and CACHE_FILE.exists():
         age = time.time() - CACHE_FILE.stat().st_mtime
         if age < CACHE_TTL:
-            return json.loads(CACHE_FILE.read_text())
+            cached = json.loads(CACHE_FILE.read_text())
+            # prefer whichever has more skills (bundled wins when developing locally)
+            if len(bundled.get("skills", [])) > len(cached.get("skills", [])):
+                return bundled
+            return cached
 
     try:
         resp = httpx.get(REGISTRY_URL, timeout=10)
         resp.raise_for_status()
-        data = resp.json()
+        remote = resp.json()
+        # prefer the index with more skills so local dev always wins
+        data = remote if len(remote.get("skills", [])) >= len(bundled.get("skills", [])) else bundled
         CACHE_FILE.write_text(json.dumps(data, indent=2))
         return data
     except Exception:
         if CACHE_FILE.exists():
-            return json.loads(CACHE_FILE.read_text())
-        return _bundled_index()
+            cached = json.loads(CACHE_FILE.read_text())
+            if len(bundled.get("skills", [])) > len(cached.get("skills", [])):
+                return bundled
+            return cached
+        return bundled
 
 
 def search_skills(query: str, tags: Optional[list[str]] = None) -> list[dict]:
