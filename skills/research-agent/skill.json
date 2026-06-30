@@ -1,0 +1,21 @@
+{
+  "name": "research-agent",
+  "display_name": "Research Agent",
+  "description": "Multi-source deep research with synthesis and inline citations. Use when user asks to research a topic, compare technologies, do competitive analysis, or investigate a subject in depth.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "research",
+    "web",
+    "synthesis",
+    "citations",
+    "analysis"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

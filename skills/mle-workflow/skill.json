@@ -1,0 +1,23 @@
+{
+  "name": "mle-workflow",
+  "display_name": "Mle Workflow",
+  "description": "Production ML engineering workflow \u2014 data contracts, reproducible training, evaluation gates, deployment, and monitoring. Use when building, reviewing, or hardening ML systems beyond notebooks.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "ml",
+    "machine-learning",
+    "mlops",
+    "training",
+    "evaluation",
+    "deployment",
+    "monitoring"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "pr-summarizer",
+  "display_name": "Pr Summarizer",
+  "description": "Generate clear, complete pull request descriptions from a diff or commit list. Use when user needs to write a PR description, wants to document a change, or asks for a commit summary.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "git",
+    "pull-request",
+    "documentation",
+    "changelog"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

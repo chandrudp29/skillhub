@@ -1,0 +1,21 @@
+{
+  "name": "sql-agent",
+  "display_name": "Sql Agent",
+  "description": "Write, optimize, and explain SQL queries. Use when user needs to write a query, debug slow SQL, understand a query plan, or design a schema.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "sql",
+    "database",
+    "postgres",
+    "performance",
+    "schema"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

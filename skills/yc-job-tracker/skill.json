@@ -1,0 +1,22 @@
+{
+  "name": "yc-job-tracker",
+  "display_name": "Yc Job Tracker",
+  "description": "Track and filter YC startup job listings for AI/ML engineering roles. Builds a daily-refreshed local database of relevant jobs with scoring and alerts for new postings.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "jobs",
+    "yc",
+    "ai-ml",
+    "scraping",
+    "career",
+    "startup"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

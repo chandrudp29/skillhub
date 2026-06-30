@@ -1,0 +1,21 @@
+{
+  "name": "test-writer",
+  "display_name": "Test Writer",
+  "description": "Write thorough, meaningful tests for any function, module, or API. Use when user asks to add tests, improve coverage, or ensure a piece of code is tested before shipping.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "testing",
+    "tdd",
+    "unit-tests",
+    "integration",
+    "coverage"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

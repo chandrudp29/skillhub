@@ -31,7 +31,9 @@ def _parse_skill(content: str, name: str) -> ParsedSkill:
     if fm_match:
         try:
             frontmatter = yaml.safe_load(fm_match.group(1)) or {}
-        except Exception:
+        except yaml.YAMLError as e:
+            import sys
+            print(f"[skillhub] Warning: Invalid YAML in skill '{name}': {e}", file=sys.stderr)
             frontmatter = {}
         body = fm_match.group(2).strip()
 

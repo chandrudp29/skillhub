@@ -1,0 +1,23 @@
+{
+  "name": "cost-tracker",
+  "display_name": "Cost Tracker",
+  "description": "Track, estimate, and optimize LLM API costs across providers. Use when user wants to understand their LLM spending, reduce costs, or compare provider pricing for a given workload.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "llm",
+    "cost",
+    "optimization",
+    "openai",
+    "anthropic",
+    "bedrock",
+    "pricing"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

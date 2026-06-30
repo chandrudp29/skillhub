@@ -1,0 +1,21 @@
+{
+  "name": "refactor-agent",
+  "display_name": "Refactor Agent",
+  "description": "Safe, systematic code refactoring \u2014 extract functions, reduce complexity, eliminate duplication, improve naming. Use when improving code structure without changing behavior.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "refactoring",
+    "code-quality",
+    "complexity",
+    "naming",
+    "patterns"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

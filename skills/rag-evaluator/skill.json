@@ -1,0 +1,22 @@
+{
+  "name": "rag-evaluator",
+  "display_name": "Rag Evaluator",
+  "description": "Evaluate RAG pipeline quality across faithfulness, relevance, and hallucination metrics. Use when user asks to test, benchmark, or improve a RAG system, or when RAG outputs look wrong.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "rag",
+    "evaluation",
+    "llm",
+    "retrieval",
+    "quality",
+    "benchmarking"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

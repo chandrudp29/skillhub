@@ -1,0 +1,21 @@
+{
+  "name": "docker-agent",
+  "display_name": "Docker Agent",
+  "description": "Write optimized Dockerfiles, docker-compose configs, and debug container issues. Use when containerizing an app, fixing a broken container, or designing a multi-service local environment.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "docker",
+    "containers",
+    "dockerfile",
+    "docker-compose",
+    "devops"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

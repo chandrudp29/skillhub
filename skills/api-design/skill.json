@@ -1,0 +1,22 @@
+{
+  "name": "api-design",
+  "display_name": "Api Design",
+  "description": "Design REST APIs with consistent naming, error handling, versioning, and pagination. Use when designing a new API, reviewing an existing one, or writing an OpenAPI spec.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "api",
+    "rest",
+    "openapi",
+    "design",
+    "http",
+    "versioning"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

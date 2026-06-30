@@ -1,0 +1,21 @@
+{
+  "name": "prompt-optimizer",
+  "display_name": "Prompt Optimizer",
+  "description": "Analyze and improve LLM prompts for clarity, precision, and output quality. Use when a prompt produces inconsistent results, the model ignores instructions, outputs are too long/short, or quality is below expectations.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "prompt",
+    "llm",
+    "optimization",
+    "instructions",
+    "output-quality"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

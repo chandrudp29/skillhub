@@ -1,0 +1,21 @@
+{
+  "name": "code-reviewer",
+  "display_name": "Code Reviewer",
+  "description": "Structured code review across five axes \u2014 correctness, security, performance, maintainability, and test coverage. Use when user asks to review code, check a PR, or audit a diff.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "code-review",
+    "security",
+    "quality",
+    "testing",
+    "pull-request"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

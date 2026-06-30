@@ -45,5 +45,15 @@ Changelog = "https://github.com/chandrudp29/skillhub/blob/main/CHANGELOG.md"
 [project.scripts]
 skillhub = "skillhub.main:app"
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["skillhub"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

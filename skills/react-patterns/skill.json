@@ -1,0 +1,22 @@
+{
+  "name": "react-patterns",
+  "display_name": "React Patterns",
+  "description": "React production patterns \u2014 hooks, state management, performance optimization, and component design. Use when building React components, reviewing React code, or fixing React performance issues.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "react",
+    "frontend",
+    "hooks",
+    "state",
+    "performance",
+    "typescript"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

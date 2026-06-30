@@ -1,0 +1,22 @@
+{
+  "name": "python-patterns",
+  "display_name": "Python Patterns",
+  "description": "Python best practices \u2014 type hints, async/await, dataclasses, error handling, and performance patterns. Use when writing new Python code, reviewing Python, or modernizing legacy code.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "python",
+    "async",
+    "type-hints",
+    "patterns",
+    "performance",
+    "best-practices"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

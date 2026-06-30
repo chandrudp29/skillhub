@@ -153,11 +153,37 @@ def install(
     agent: str = _agent_option(),
     all_agents: bool = typer.Option(False, "--all-agents", help="Install for all supported agents"),
     overwrite: bool = typer.Option(False, "--overwrite", "-f", help="Overwrite if already installed"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Show what would be installed without writing files"),
 ):
     """Install a skill into your project."""
     from .installer import install as _install
+    from .registry import get_skill
+    from .adapters import get_install_path, AGENTS
+
+    # Validate skill exists first
+    skill_meta = get_skill(name)
+    if not skill_meta:
+        console.print(f"[red]Error:[/] Skill '{name}' not found in registry.")
+        console.print(f"Try: [bold]skillhub search {name}[/]")
+        raise typer.Exit(1)
 
     agents_label = "all agents" if all_agents else AGENT_LABELS.get(agent, agent)
+
+    if dry_run:
+        console.print(f"\n[bold][DRY RUN][/] Would install [cyan]{name}[/] for {agents_label}:\n")
+        targets = list(AGENTS.keys()) if all_agents else [agent]
+        supported = skill_meta.get("agents", ["claude"])
+        for tgt in targets:
+            if tgt not in supported:
+                continue
+            path = get_install_path(tgt, name, Path.cwd())
+            rel = path.relative_to(Path.cwd()) if path.is_absolute() else path
+            exists = path.exists()
+            status = "[yellow](exists)[/]" if exists else "[green](new)[/]"
+            console.print(f"  {AGENT_LABELS.get(tgt, tgt)} → [dim]{rel}[/] {status}")
+        console.print(f"\n[dim]Run without --dry-run to install.[/]\n")
+        return
+
     console.print(f"\n[bold]Installing[/] [cyan]{name}[/] for {agents_label}...\n")
 
     try:
@@ -222,6 +248,7 @@ def compose(
     output: str = typer.Option("composed-skill", "--output", "-o", help="Name for the composed skill"),
     agent: str = _agent_option(),
     no_install: bool = typer.Option(False, "--no-install", help="Print composed skill, don't write to disk"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Show what would be composed without writing files"),
 ):
     """
     Compose multiple skills into one unified skill file.
@@ -230,10 +257,30 @@ def compose(
       skillhub compose research-agent rag-evaluator code-reviewer
     """
     from .composer import compose as _compose
+    from .registry import get_skill
+    from .adapters import get_install_path
 
     if len(skills) < 2:
         console.print("[red]Compose needs at least 2 skills.[/]")
         raise typer.Exit(1)
+
+    # Validate all skills exist
+    missing = [s for s in skills if not get_skill(s)]
+    if missing:
+        console.print(f"[red]Error:[/] Skill(s) not found: {', '.join(missing)}")
+        raise typer.Exit(1)
+
+    if dry_run:
+        console.print(f"\n[bold][DRY RUN][/] Would compose:\n")
+        for s in skills:
+            skill_meta = get_skill(s)
+            console.print(f"  [cyan]{s}[/] v{skill_meta.get('version', '1.0.0')}")
+        console.print(f"\n  → Output: [bold]{output}[/]")
+        path = get_install_path(agent, output, Path.cwd())
+        rel = path.relative_to(Path.cwd()) if path.is_absolute() else path
+        console.print(f"  → Path: [dim]{rel}[/]")
+        console.print(f"\n[dim]Run without --dry-run to compose.[/]\n")
+        return
 
     console.print(f"\n[bold]Composing[/] {' + '.join(f'[cyan]{s}[/]' for s in skills)} → [bold]{output}[/]\n")
 

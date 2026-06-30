@@ -1,0 +1,22 @@
+{
+  "name": "security-review",
+  "display_name": "Security Review",
+  "description": "Security audit focused on OWASP Top 10 \u2014 injection, auth flaws, secrets exposure, IDOR, and more. Use when reviewing code for vulnerabilities, before deploying to production, or auditing a new codebase.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "security",
+    "owasp",
+    "vulnerabilities",
+    "auth",
+    "injection",
+    "secrets"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

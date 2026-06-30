@@ -1,0 +1,23 @@
+{
+  "name": "fastapi-patterns",
+  "display_name": "Fastapi Patterns",
+  "description": "FastAPI production patterns \u2014 routing, dependency injection, background tasks, streaming, error handling, and async. Use when building or reviewing a FastAPI service.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "fastapi",
+    "python",
+    "api",
+    "async",
+    "pydantic",
+    "rest",
+    "streaming"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

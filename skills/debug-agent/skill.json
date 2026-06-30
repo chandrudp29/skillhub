@@ -1,0 +1,20 @@
+{
+  "name": "debug-agent",
+  "display_name": "Debug Agent",
+  "description": "Systematic root cause analysis for bugs, errors, and unexpected behavior. Use when user reports something broken, an error they can't explain, or unexpected output.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "debugging",
+    "error-analysis",
+    "root-cause",
+    "testing"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

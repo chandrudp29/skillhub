@@ -1,0 +1,22 @@
+{
+  "name": "llm-evaluator",
+  "display_name": "Llm Evaluator",
+  "description": "Evaluate LLM outputs systematically using LLM-as-judge, human evaluation frameworks, and regression testing. Use when assessing model quality, comparing models, or preventing quality regression.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "llm",
+    "evaluation",
+    "benchmarking",
+    "quality",
+    "llm-as-judge",
+    "regression"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

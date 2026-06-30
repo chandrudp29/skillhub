@@ -1,0 +1,23 @@
+{
+  "name": "agent-builder",
+  "display_name": "Agent Builder",
+  "description": "Build production-ready LLM agents with LangGraph, tool use, memory, streaming, and error handling. Use when designing or implementing an AI agent, multi-agent system, or agentic workflow.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "agent",
+    "langgraph",
+    "llm",
+    "tools",
+    "memory",
+    "streaming",
+    "multi-agent"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}

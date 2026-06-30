@@ -1,0 +1,22 @@
+{
+  "name": "git-workflow",
+  "display_name": "Git Workflow",
+  "description": "Git branching, commit conventions, rebase vs merge, conflict resolution, and release tagging. Use when setting up a git workflow, writing commits, resolving conflicts, or preparing a release.",
+  "version": "1.0.0",
+  "agents": [
+    "claude",
+    "cursor",
+    "codex",
+    "gemini"
+  ],
+  "tags": [
+    "git",
+    "branching",
+    "commits",
+    "workflow",
+    "collaboration",
+    "release"
+  ],
+  "author": "chandrudp29",
+  "license": "MIT"
+}
