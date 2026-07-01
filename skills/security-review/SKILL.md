@@ -4,6 +4,7 @@ description: Security audit focused on OWASP Top 10 — injection, auth flaws, s
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [security, owasp, vulnerabilities, auth, injection, secrets]
+triggers: ['security', 'vulnerability', 'owasp', 'injection', 'auth', 'secrets', 'secure']
 ---
 
 # Security Review

@@ -4,6 +4,7 @@ description: Track and filter YC startup job listings for AI/ML engineering role
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [jobs, yc, ai-ml, scraping, career, startup]
+triggers: ['yc jobs', 'job search', 'startup jobs', 'y combinator', 'job tracker', 'hiring']
 ---
 
 # YC Job Tracker

@@ -4,6 +4,7 @@ description: Safe, systematic code refactoring — extract functions, reduce com
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [refactoring, code-quality, complexity, naming, patterns]
+triggers: ['refactor', 'clean up', 'restructure', 'simplify', 'improve code', 'technical debt']
 ---
 
 # Refactor Agent

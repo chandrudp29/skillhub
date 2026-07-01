@@ -4,6 +4,7 @@ description: React production patterns — hooks, state management, performance 
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [react, frontend, hooks, state, performance, typescript]
+triggers: ['react', 'component', 'hooks', 'jsx', 'frontend', 'next.js', 'react 18']
 ---
 
 # React Patterns

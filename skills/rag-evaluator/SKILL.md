@@ -4,6 +4,7 @@ description: Evaluate RAG pipeline quality across faithfulness, relevance, and h
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [rag, evaluation, llm, retrieval, quality, benchmarking]
+triggers: ['rag', 'retrieval augmented', 'faithfulness', 'hallucination', 'evaluate rag', 'context']
 ---
 
 # RAG Evaluator

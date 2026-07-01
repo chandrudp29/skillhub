@@ -4,6 +4,7 @@ description: Generate accurate, useful documentation for code — README files, 
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [documentation, readme, api-docs, docstrings, changelog]
+triggers: ['documentation', 'readme', 'docstring', 'api docs', 'write docs', 'generate docs']
 ---
 
 # Doc Generator

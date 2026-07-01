@@ -4,6 +4,7 @@ description: Track, estimate, and optimize LLM API costs across providers. Use w
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [llm, cost, optimization, openai, anthropic, bedrock, pricing]
+triggers: ['cost', 'spending', 'token usage', 'llm cost', 'api cost', 'budget', 'expensive']
 ---
 
 # Cost Tracker

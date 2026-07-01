@@ -4,6 +4,7 @@ description: Structured code review across five axes — correctness, security, 
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [code-review, security, quality, testing, pull-request]
+triggers: ['review', 'code review', 'pr review', 'check code', 'audit code', 'review this']
 ---
 
 # Code Reviewer

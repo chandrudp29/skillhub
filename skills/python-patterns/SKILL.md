@@ -4,6 +4,7 @@ description: Python best practices — type hints, async/await, dataclasses, err
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [python, async, type-hints, patterns, performance, best-practices]
+triggers: ['python', 'best practices', 'type hints', 'dataclass', 'async python', 'pythonic']
 ---
 
 # Python Patterns

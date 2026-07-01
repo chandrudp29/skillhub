@@ -4,6 +4,7 @@ description: Evaluate LLM outputs systematically using LLM-as-judge, human evalu
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [llm, evaluation, benchmarking, quality, llm-as-judge, regression]
+triggers: ['evaluate llm', 'llm metrics', 'eval framework', 'test prompts', 'benchmark']
 ---
 
 # LLM Evaluator

@@ -4,6 +4,7 @@ description: Design REST APIs with consistent naming, error handling, versioning
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [api, rest, openapi, design, http, versioning]
+triggers: ['api design', 'rest api', 'endpoint', 'routes', 'http api', 'openapi', 'swagger']
 ---
 
 # API Design

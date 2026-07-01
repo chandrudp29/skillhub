@@ -4,6 +4,7 @@ description: Multi-source deep research with synthesis and inline citations. Use
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [research, web, synthesis, citations, analysis]
+triggers: ['research', 'investigate', 'compare', 'analyze', 'find information', 'deep dive']
 ---
 
 # Research Agent

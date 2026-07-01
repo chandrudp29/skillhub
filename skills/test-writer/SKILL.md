@@ -4,6 +4,7 @@ description: Write thorough, meaningful tests for any function, module, or API. 
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [testing, tdd, unit-tests, integration, coverage]
+triggers: ['test', 'unit test', 'coverage', 'tdd', 'pytest', 'spec', 'write tests']
 ---
 
 # Test Writer

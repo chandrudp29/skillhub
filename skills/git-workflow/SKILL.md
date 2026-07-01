@@ -4,6 +4,7 @@ description: Git branching, commit conventions, rebase vs merge, conflict resolu
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [git, branching, commits, workflow, collaboration, release]
+triggers: ['git', 'branch', 'commit', 'merge', 'rebase', 'pull request', 'git workflow']
 ---
 
 # Git Workflow

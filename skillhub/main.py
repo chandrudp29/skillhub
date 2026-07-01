@@ -22,7 +22,7 @@ app = typer.Typer(
 )
 console = Console()
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 
 def _suggest_similar(name: str, threshold: float = 0.6) -> list[str]:
@@ -375,6 +375,69 @@ def compose(
         path_template = AGENT_PATHS.get(agent, ".claude/commands/{name}.md")
         out_path = path_template.format(name=output) if "{name}" in path_template else path_template
         console.print(f"[green]✓[/] Written to [bold]{out_path}[/]\n")
+
+
+@app.command(name="init")
+def init_skill(
+    name: str = typer.Argument(..., help="Skill name (use kebab-case, e.g. my-skill)"),
+):
+    """Scaffold a new skill locally. Creates <name>/SKILL.md with a template."""
+    import re
+
+    if not re.match(r'^[a-z][a-z0-9-]*$', name):
+        console.print("[red]Error:[/] Skill names must be lowercase kebab-case (e.g. [bold]my-skill[/]).")
+        raise typer.Exit(1)
+
+    skill_dir = Path.cwd() / name
+    skill_md = skill_dir / "SKILL.md"
+
+    if skill_md.exists():
+        console.print(f"[yellow]{skill_md} already exists.[/] Edit it directly or delete and re-run.")
+        raise typer.Exit(1)
+
+    skill_dir.mkdir(parents=True, exist_ok=True)
+    skill_md.write_text(f"""---
+name: {name}
+description: What this skill makes your agent do (one sentence, start with a verb)
+version: 1.0.0
+agents: [claude, cursor, codex, gemini]
+tags: [your, tags, here]
+triggers: ['keyword one', 'keyword two', 'phrase that activates this']
+author: your-github-username
+license: MIT
+---
+
+# {name.replace('-', ' ').title()}
+
+<!-- Describe what this skill is and when to use it -->
+
+## When to Use
+
+- Situation 1 where this skill applies
+- Situation 2 where this skill applies
+
+## Approach
+
+<!-- The methodology, process, or discipline you want the agent to follow -->
+
+### Step 1 — ...
+
+### Step 2 — ...
+
+### Step 3 — ...
+
+## Output Format
+
+<!-- How should the agent structure its response? -->
+
+- Format item 1
+- Format item 2
+""")
+
+    console.print(f"\n[green]✓[/] Created [bold]{name}/SKILL.md[/]\n")
+    console.print("[dim]Edit the file, then:[/]")
+    console.print(f"  [bold]skillhub install {name}[/]     [dim]# test it locally[/]")
+    console.print(f"  [bold]skillhub publish {name}/[/]    [dim]# submit to registry[/]\n")
 
 
 @app.command()

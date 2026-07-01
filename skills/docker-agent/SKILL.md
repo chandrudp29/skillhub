@@ -4,6 +4,7 @@ description: Write optimized Dockerfiles, docker-compose configs, and debug cont
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [docker, containers, dockerfile, docker-compose, devops]
+triggers: ['docker', 'dockerfile', 'container', 'containerize', 'docker-compose', 'image build']
 ---
 
 # Docker Agent

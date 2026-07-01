@@ -4,6 +4,7 @@ description: FastAPI production patterns — routing, dependency injection, back
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [fastapi, python, api, async, pydantic, rest, streaming]
+triggers: ['fastapi', 'fast api', 'python api', 'async api', 'pydantic', 'starlette']
 ---
 
 # FastAPI Patterns

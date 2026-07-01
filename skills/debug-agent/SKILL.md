@@ -4,6 +4,7 @@ description: Systematic root cause analysis for bugs, errors, and unexpected beh
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [debugging, error-analysis, root-cause, testing]
+triggers: ['debug', 'bug', 'error', 'broken', 'not working', 'crash', 'exception', 'fails', 'issue']
 ---
 
 # Debug Agent

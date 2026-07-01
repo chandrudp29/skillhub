@@ -4,6 +4,7 @@ description: Write, optimize, and explain SQL queries. Use when user needs to wr
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [sql, database, postgres, performance, schema]
+triggers: ['sql', 'query', 'database', 'optimize query', 'write sql', 'postgres', 'mysql']
 ---
 
 # SQL Agent

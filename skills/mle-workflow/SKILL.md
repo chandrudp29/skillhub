@@ -4,6 +4,7 @@ description: Production ML engineering workflow — data contracts, reproducible
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [ml, machine-learning, mlops, training, evaluation, deployment, monitoring]
+triggers: ['ml workflow', 'train model', 'machine learning', 'deploy model', 'mlops', 'pipeline']
 ---
 
 # ML Engineering Workflow

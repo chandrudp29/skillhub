@@ -4,6 +4,7 @@ description: Generate clear, complete pull request descriptions from a diff or c
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [git, pull-request, documentation, changelog]
+triggers: ['pr description', 'pull request description', 'summarize changes', 'changelog', 'release notes']
 ---
 
 # PR Summarizer

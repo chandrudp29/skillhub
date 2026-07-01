@@ -4,6 +4,7 @@ description: Build production-ready LLM agents with LangGraph, tool use, memory,
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [agent, langgraph, llm, tools, memory, streaming, multi-agent]
+triggers: ['build agent', 'create agent', 'langgraph', 'llm agent', 'agentic', 'tool calling', 'multi-agent']
 ---
 
 # Agent Builder

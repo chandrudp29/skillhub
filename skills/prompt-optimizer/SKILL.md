@@ -4,6 +4,7 @@ description: Analyze and improve LLM prompts for clarity, precision, and output 
 version: 1.0.0
 agents: [claude, cursor, codex, gemini]
 tags: [prompt, llm, optimization, instructions, output-quality]
+triggers: ['improve prompt', 'optimize prompt', 'prompt engineering', 'bad prompt', 'fix prompt']
 ---
 
 # Prompt Optimizer

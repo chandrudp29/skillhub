@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "skillhub-ai"
-version = "0.1.1"
+version = "0.1.2"
 description = "The package manager for AI agent skills — install, compose, and publish skills for Claude Code, Cursor, Codex, and Gemini CLI"
 readme = "README.md"
 license = { text = "MIT" }

@@ -5,222 +5,662 @@
     {
       "name": "agent-builder",
       "display_name": "Agent Builder",
-      "description": "Build production LLM agents with LangGraph — tools, memory, streaming, multi-agent patterns, and error handling.",
+      "description": "Build production LLM agents with LangGraph \u2014 tools, memory, streaming, multi-agent patterns, and error handling.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["agent", "langgraph", "llm", "tools", "memory", "streaming", "multi-agent"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "agent",
+        "langgraph",
+        "llm",
+        "tools",
+        "memory",
+        "streaming",
+        "multi-agent"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "build agent",
+        "create agent",
+        "langgraph",
+        "llm agent",
+        "agentic",
+        "tool calling",
+        "multi-agent"
+      ]
     },
     {
       "name": "api-design",
       "display_name": "API Design",
       "description": "REST API design: URL conventions, HTTP status codes, error formats, pagination, versioning, and OpenAPI docs.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["api", "rest", "openapi", "design", "http", "versioning"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "api",
+        "rest",
+        "openapi",
+        "design",
+        "http",
+        "versioning"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "api design",
+        "rest api",
+        "endpoint",
+        "routes",
+        "http api",
+        "openapi",
+        "swagger"
+      ]
     },
     {
       "name": "code-reviewer",
       "display_name": "Code Reviewer",
       "description": "Five-axis structured code review: correctness, security, performance, maintainability, test coverage. Severity-labeled findings.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["code-review", "security", "quality", "testing", "pull-request"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "code-review",
+        "security",
+        "quality",
+        "testing",
+        "pull-request"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "review",
+        "code review",
+        "pr review",
+        "check code",
+        "audit code",
+        "review this"
+      ]
     },
     {
       "name": "cost-tracker",
       "display_name": "LLM Cost Tracker",
       "description": "Track, estimate, and optimize LLM API costs across OpenAI, Anthropic, Bedrock, and Gemini. Finds your biggest cost drivers.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["llm", "cost", "optimization", "openai", "anthropic", "bedrock", "pricing"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "llm",
+        "cost",
+        "optimization",
+        "openai",
+        "anthropic",
+        "bedrock",
+        "pricing"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "cost",
+        "spending",
+        "token usage",
+        "llm cost",
+        "api cost",
+        "budget",
+        "expensive"
+      ]
     },
     {
       "name": "debug-agent",
       "display_name": "Debug Agent",
       "description": "Systematic root cause analysis: build a feedback loop first, then hypothesize, instrument, fix. No guessing.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["debugging", "error-analysis", "root-cause", "testing"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "debugging",
+        "error-analysis",
+        "root-cause",
+        "testing"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "debug",
+        "bug",
+        "error",
+        "broken",
+        "not working",
+        "crash",
+        "exception",
+        "fails",
+        "issue"
+      ]
     },
     {
       "name": "doc-generator",
       "display_name": "Doc Generator",
       "description": "Generate accurate README files, API docs, inline docstrings, and changelogs. Documentation developers actually read.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["documentation", "readme", "api-docs", "docstrings", "changelog"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "documentation",
+        "readme",
+        "api-docs",
+        "docstrings",
+        "changelog"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "documentation",
+        "readme",
+        "docstring",
+        "api docs",
+        "write docs",
+        "generate docs"
+      ]
     },
     {
       "name": "docker-agent",
       "display_name": "Docker Agent",
       "description": "Write optimized Dockerfiles, docker-compose configs, debug container issues, and reduce image sizes.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["docker", "containers", "dockerfile", "docker-compose", "devops"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "docker",
+        "containers",
+        "dockerfile",
+        "docker-compose",
+        "devops"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "docker",
+        "dockerfile",
+        "container",
+        "containerize",
+        "docker-compose",
+        "image build"
+      ]
     },
     {
       "name": "fastapi-patterns",
       "display_name": "FastAPI Patterns",
       "description": "FastAPI production patterns: dependency injection, streaming, background tasks, error handling, middleware, and async.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["fastapi", "python", "api", "async", "pydantic", "rest", "streaming"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "fastapi",
+        "python",
+        "api",
+        "async",
+        "pydantic",
+        "rest",
+        "streaming"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "fastapi",
+        "fast api",
+        "python api",
+        "async api",
+        "pydantic",
+        "starlette"
+      ]
     },
     {
       "name": "git-workflow",
       "display_name": "Git Workflow",
       "description": "Git branching strategies, commit conventions, rebase vs merge, conflict resolution, and release tagging.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["git", "branching", "commits", "workflow", "collaboration", "release"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "git",
+        "branching",
+        "commits",
+        "workflow",
+        "collaboration",
+        "release"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "git",
+        "branch",
+        "commit",
+        "merge",
+        "rebase",
+        "pull request",
+        "git workflow"
+      ]
     },
     {
       "name": "llm-evaluator",
       "display_name": "LLM Evaluator",
       "description": "Evaluate LLM outputs with LLM-as-judge, automated metrics, and human evaluation. Includes regression testing framework.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["llm", "evaluation", "benchmarking", "quality", "llm-as-judge", "regression"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "llm",
+        "evaluation",
+        "benchmarking",
+        "quality",
+        "llm-as-judge",
+        "regression"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "evaluate llm",
+        "llm metrics",
+        "eval framework",
+        "test prompts",
+        "benchmark"
+      ]
     },
     {
       "name": "mle-workflow",
       "display_name": "ML Engineering Workflow",
       "description": "Production ML workflow: data contracts, baseline, reproducible training, evaluation gates, deployment, and monitoring.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["ml", "machine-learning", "mlops", "training", "evaluation", "deployment", "monitoring"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "ml",
+        "machine-learning",
+        "mlops",
+        "training",
+        "evaluation",
+        "deployment",
+        "monitoring"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "ml workflow",
+        "train model",
+        "machine learning",
+        "deploy model",
+        "mlops",
+        "pipeline"
+      ]
     },
     {
       "name": "pr-summarizer",
       "display_name": "PR Summarizer",
       "description": "Generate clear pull request descriptions from diffs: what, why, how, test plan, and risks. Context-first, not diff-first.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["git", "pull-request", "documentation", "changelog"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "git",
+        "pull-request",
+        "documentation",
+        "changelog"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "pr description",
+        "pull request description",
+        "summarize changes",
+        "changelog",
+        "release notes"
+      ]
     },
     {
       "name": "prompt-optimizer",
       "display_name": "Prompt Optimizer",
-      "description": "Diagnose and rewrite underperforming LLM prompts — fix hallucination, inconsistency, wrong format, and instruction-ignoring.",
+      "description": "Diagnose and rewrite underperforming LLM prompts \u2014 fix hallucination, inconsistency, wrong format, and instruction-ignoring.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["prompt", "llm", "optimization", "instructions", "output-quality"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "prompt",
+        "llm",
+        "optimization",
+        "instructions",
+        "output-quality"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "improve prompt",
+        "optimize prompt",
+        "prompt engineering",
+        "bad prompt",
+        "fix prompt"
+      ]
     },
     {
       "name": "python-patterns",
       "display_name": "Python Patterns",
       "description": "Modern Python best practices: type hints, async/await, dataclasses, Pydantic, error handling, and performance patterns.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["python", "async", "type-hints", "patterns", "performance", "best-practices"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "python",
+        "async",
+        "type-hints",
+        "patterns",
+        "performance",
+        "best-practices"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "python",
+        "best practices",
+        "type hints",
+        "dataclass",
+        "async python",
+        "pythonic"
+      ]
     },
     {
       "name": "rag-evaluator",
       "display_name": "RAG Evaluator",
       "description": "Evaluate RAG pipeline quality across faithfulness, relevance, and hallucination. Finds where your RAG breaks before users do.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["rag", "evaluation", "llm", "retrieval", "quality", "benchmarking"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "rag",
+        "evaluation",
+        "llm",
+        "retrieval",
+        "quality",
+        "benchmarking"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "rag",
+        "retrieval augmented",
+        "faithfulness",
+        "hallucination",
+        "evaluate rag",
+        "context"
+      ]
     },
     {
       "name": "react-patterns",
       "display_name": "React Patterns",
       "description": "Modern React 18+ patterns: hooks, state management, performance optimization, TypeScript, and component design.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["react", "frontend", "hooks", "state", "performance", "typescript"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "react",
+        "frontend",
+        "hooks",
+        "state",
+        "performance",
+        "typescript"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "react",
+        "component",
+        "hooks",
+        "jsx",
+        "frontend",
+        "next.js",
+        "react 18"
+      ]
     },
     {
       "name": "refactor-agent",
       "display_name": "Refactor Agent",
       "description": "Safe systematic refactoring: extract functions, eliminate duplication, reduce complexity, improve naming. Tests first.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["refactoring", "code-quality", "complexity", "naming", "patterns"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "refactoring",
+        "code-quality",
+        "complexity",
+        "naming",
+        "patterns"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "refactor",
+        "clean up",
+        "restructure",
+        "simplify",
+        "improve code",
+        "technical debt"
+      ]
     },
     {
       "name": "research-agent",
       "display_name": "Research Agent",
       "description": "Multi-source deep research with synthesis and inline citations. Structured workflow: clarify, decompose, search, synthesize.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["research", "web", "synthesis", "citations", "analysis"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "research",
+        "web",
+        "synthesis",
+        "citations",
+        "analysis"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "research",
+        "investigate",
+        "compare",
+        "analyze",
+        "find information",
+        "deep dive"
+      ]
     },
     {
       "name": "security-review",
       "display_name": "Security Review",
       "description": "Security audit: OWASP Top 10, injection vulnerabilities, auth flaws, secrets exposure, IDOR, and dependency CVEs.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["security", "owasp", "vulnerabilities", "auth", "injection", "secrets"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "security",
+        "owasp",
+        "vulnerabilities",
+        "auth",
+        "injection",
+        "secrets"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "security",
+        "vulnerability",
+        "owasp",
+        "injection",
+        "auth",
+        "secrets",
+        "secure"
+      ]
     },
     {
       "name": "sql-agent",
       "display_name": "SQL Agent",
       "description": "Write, optimize, and explain SQL queries. Covers query plans, index strategy, schema design, and safety for PostgreSQL, MySQL, SQLite.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["sql", "database", "postgres", "performance", "schema"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "sql",
+        "database",
+        "postgres",
+        "performance",
+        "schema"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "sql",
+        "query",
+        "database",
+        "optimize query",
+        "write sql",
+        "postgres",
+        "mysql"
+      ]
     },
     {
       "name": "test-writer",
       "display_name": "Test Writer",
-      "description": "Write thorough, meaningful tests — happy path, edge cases, error cases, integration. Tests that actually catch bugs.",
+      "description": "Write thorough, meaningful tests \u2014 happy path, edge cases, error cases, integration. Tests that actually catch bugs.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["testing", "tdd", "unit-tests", "integration", "coverage"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "testing",
+        "tdd",
+        "unit-tests",
+        "integration",
+        "coverage"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "test",
+        "unit test",
+        "coverage",
+        "tdd",
+        "pytest",
+        "spec",
+        "write tests"
+      ]
     },
     {
       "name": "yc-job-tracker",
       "display_name": "YC Job Tracker",
       "description": "Track and score AI/ML engineering jobs at YC startups. Daily refresh, relevance scoring, and new-posting alerts.",
       "version": "1.0.0",
-      "agents": ["claude", "cursor", "codex", "gemini"],
-      "tags": ["jobs", "yc", "ai-ml", "scraping", "career", "startup"],
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "jobs",
+        "yc",
+        "ai-ml",
+        "scraping",
+        "career",
+        "startup"
+      ],
       "author": "chandrudp29",
-      "license": "MIT"
+      "license": "MIT",
+      "triggers": [
+        "yc jobs",
+        "job search",
+        "startup jobs",
+        "y combinator",
+        "job tracker",
+        "hiring"
+      ]
     }
   ]
 }

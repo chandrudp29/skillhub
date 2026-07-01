@@ -3,11 +3,33 @@ Installer: orchestrates fetching a skill from registry and writing to project.
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Optional
 
 from .adapters import AGENTS, install_skill_to_agent
 from .registry import fetch_skill_content, get_skill
+
+
+def _update_skills_json(skill_meta: dict, root: Path) -> None:
+    """Write/update .claude/skills.json with a lightweight index for agent routing."""
+    skills_json = root / ".claude" / "skills.json"
+    skills_json.parent.mkdir(parents=True, exist_ok=True)
+
+    index: dict = {"_skillhub": "1.0", "skills": {}}
+    if skills_json.exists():
+        try:
+            index = json.loads(skills_json.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    name = skill_meta["name"]
+    index["skills"][name] = {
+        "path": f"commands/{name}.md",
+        "description": skill_meta.get("description", ""),
+        "triggers": skill_meta.get("triggers", []),
+    }
+    skills_json.write_text(json.dumps(index, indent=2))
 
 
 def install(
@@ -39,6 +61,9 @@ def install(
 
         path = install_skill_to_agent(content, tgt, skill_name, root, overwrite)
         installed[tgt] = path
+
+    if "claude" in installed:
+        _update_skills_json(skill_meta, root)
 
     return installed
 
