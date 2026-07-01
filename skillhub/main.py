@@ -3,7 +3,6 @@ skillhub — the package manager for AI agent skills.
 """
 from __future__ import annotations
 
-import subprocess
 import webbrowser
 from pathlib import Path
 from typing import Optional
@@ -154,7 +153,7 @@ def info(
     name: str = typer.Argument(..., help="Skill name"),
 ):
     """Show detailed information about a skill."""
-    from .registry import get_skill, fetch_skill_content
+    from .registry import get_skill
 
     skill = get_skill(name)
     if not skill:
@@ -249,7 +248,7 @@ def uninstall(
     path = get_install_path(agent, name, Path.cwd())
     if not path.exists() and agent != "codex":
         console.print(f"[yellow]Skill '{name}' not found in project.[/]")
-        console.print(f"Check installed skills: [bold]skillhub list --installed[/]")
+        console.print("Check installed skills: [bold]skillhub list --installed[/]")
         raise typer.Exit(1)
 
     # Show what will be removed and confirm
@@ -321,15 +320,15 @@ def compose(
         raise typer.Exit(1)
 
     if dry_run:
-        console.print(f"\n[bold][DRY RUN][/] Would compose:\n")
+        console.print("\n[bold][DRY RUN][/] Would compose:\n")
         for s in skills:
-            skill_meta = get_skill(s)
+            skill_meta = get_skill(s) or {}
             console.print(f"  [cyan]{s}[/] v{skill_meta.get('version', '1.0.0')}")
         console.print(f"\n  → Output: [bold]{output}[/]")
         path = get_install_path(agent, output, Path.cwd())
         rel = path.relative_to(Path.cwd()) if path.is_absolute() else path
         console.print(f"  → Path: [dim]{rel}[/]")
-        console.print(f"\n[dim]Run without --dry-run to compose.[/]\n")
+        console.print("\n[dim]Run without --dry-run to compose.[/]\n")
         return
 
     console.print(f"\n[bold]Composing[/] {' + '.join(f'[cyan]{s}[/]' for s in skills)} → [bold]{output}[/]\n")
@@ -367,7 +366,6 @@ def publish(
     Publish a skill to the skillhub registry (opens a GitHub PR).
     """
     skill_md = path / "SKILL.md"
-    skill_json = path / "skill.json"
 
     if not skill_md.exists():
         console.print(f"[red]No SKILL.md found in {path}[/]")
