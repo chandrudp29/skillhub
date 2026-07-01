@@ -113,7 +113,7 @@ def list_skills(
         skills = list_installed(agent)
         if not skills:
             console.print(f"[yellow]No skills installed for {agent} in this project.[/]")
-            console.print(f"Install one: [bold]skillhub install research-agent[/]")
+            console.print("Install one: [bold]skillhub install research-agent[/]")
             return
         console.print(f"\n[bold]Installed skills[/] ({AGENT_LABELS.get(agent, agent)}):\n")
         for s in skills:
@@ -166,10 +166,14 @@ def info(
 
     panel_content = Text()
     panel_content.append(f"{skill.get('description', '')}\n\n", style="white")
-    panel_content.append("Author:   ", style="dim"); panel_content.append(f"{skill.get('author', 'skillhub-team')}\n", style="cyan")
-    panel_content.append("Version:  ", style="dim"); panel_content.append(f"{skill.get('version', '1.0.0')}\n", style="cyan")
-    panel_content.append("Agents:   ", style="dim"); panel_content.append(f"{', '.join(skill.get('agents', ['claude']))}\n", style="cyan")
-    panel_content.append("Tags:     ", style="dim"); panel_content.append(f"{', '.join(skill.get('tags', []))}\n", style="cyan")
+    panel_content.append("Author:   ", style="dim")
+    panel_content.append(f"{skill.get('author', 'skillhub-team')}\n", style="cyan")
+    panel_content.append("Version:  ", style="dim")
+    panel_content.append(f"{skill.get('version', '1.0.0')}\n", style="cyan")
+    panel_content.append("Agents:   ", style="dim")
+    panel_content.append(f"{', '.join(skill.get('agents', ['claude']))}\n", style="cyan")
+    panel_content.append("Tags:     ", style="dim")
+    panel_content.append(f"{', '.join(skill.get('tags', []))}\n", style="cyan")
 
     console.print(Panel(panel_content, title=f"[bold cyan]{name}[/]", border_style="cyan"))
     console.print(f"\nInstall:  [bold]skillhub install {name}[/]")
@@ -213,7 +217,7 @@ def install(
             exists = path.exists()
             status = "[yellow](exists)[/]" if exists else "[green](new)[/]"
             console.print(f"  {AGENT_LABELS.get(tgt, tgt)} → [dim]{rel}[/] {status}")
-        console.print(f"\n[dim]Run without --dry-run to install.[/]\n")
+        console.print("\n[dim]Run without --dry-run to install.[/]\n")
         return
 
     console.print(f"\n[bold]Installing[/] [cyan]{name}[/] for {agents_label}...\n")
