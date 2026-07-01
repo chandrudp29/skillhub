@@ -22,7 +22,7 @@ app = typer.Typer(
 )
 console = Console()
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 def _suggest_similar(name: str, threshold: float = 0.6) -> list[str]:
@@ -193,15 +193,6 @@ def install(
     from .registry import get_skill
     from .adapters import get_install_path, AGENTS
 
-    # Guard: refuse to install into system/root directories
-    cwd = Path.cwd()
-    cwd_parts = cwd.parts
-    if len(cwd_parts) <= 1 or (len(cwd_parts) == 2 and cwd_parts[0] == "/" and cwd_parts[1] in ("usr", "bin", "etc", "var", "tmp", "root")):
-        console.print("[red]Error:[/] You are not inside a project directory.")
-        console.print("  [dim]cd to your project first, then run:[/]")
-        console.print(f"  [bold]skillhub install {name}[/]\n")
-        raise typer.Exit(1)
-
     # Validate skill exists first
     skill_meta = get_skill(name)
     if not skill_meta:
@@ -235,6 +226,15 @@ def install(
         installed = _install(name, agent=agent, all_agents=all_agents, overwrite=overwrite)
     except FileExistsError as e:
         console.print(f"[yellow]Already installed.[/] Use [bold]--overwrite[/] to replace.\n  {e}")
+        raise typer.Exit(1)
+    except PermissionError:
+        console.print("[red]Error:[/] Cannot write to the current directory.\n")
+        console.print("  [dim]You need to be inside your project folder. Run:[/]")
+        console.print("  cd your-project")
+        console.print(f"  skillhub install {name}\n")
+        console.print("  [dim]Or create a new project folder:[/]")
+        console.print("  mkdir my-project && cd my-project")
+        console.print(f"  skillhub install {name}\n")
         raise typer.Exit(1)
     except ValueError as e:
         console.print(f"[red]Error:[/] {e}")
