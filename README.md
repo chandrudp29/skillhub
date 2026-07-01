@@ -1,6 +1,6 @@
 # skillhub
 
-[![PyPI version](https://img.shields.io/pypi/v/skillhub.svg)](https://pypi.org/project/skillhub/)
+[![PyPI version](https://img.shields.io/pypi/v/skillhub-ai.svg)](https://pypi.org/project/skillhub-ai/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Skills](https://img.shields.io/badge/skills-22-purple.svg)](#available-skills)
@@ -10,7 +10,7 @@
 Install, compose, and publish reusable prompting workflows for Claude Code, Cursor, Codex, and Gemini CLI — in one command.
 
 ```bash
-pip install skillhub
+pip install skillhub-ai
 skillhub install research-agent
 ```
 
@@ -42,7 +42,7 @@ skillhub install research-agent --all-agents  # Done. All 4 agents configured.
 ## Installation
 
 ```bash
-pip install skillhub
+pip install skillhub-ai
 ```
 
 Requires Python 3.9+. No other dependencies needed.

@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "skillhub"
+name = "skillhub-ai"
 version = "0.1.0"
 description = "The package manager for AI agent skills — install, compose, and publish skills for Claude Code, Cursor, Codex, and Gemini CLI"
 readme = "README.md"
