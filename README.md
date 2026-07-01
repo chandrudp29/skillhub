@@ -19,7 +19,7 @@ skillhub install research-agent
 
 ## Demo
 
-![skillhub demo](docs/demo.svg)
+![skillhub demo](docs/demo.gif)
 
 ---
 
