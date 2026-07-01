@@ -12,96 +12,85 @@ Stop copying `.md` files between projects. Install, compose, and publish reusabl
 
 ```bash
 pip install skillhub-ai
-skillhub install research-agent
+skillhub install debug-agent
 ```
 
 ---
 
-## Demo
+## Install a skill in 10 seconds
 
-![skillhub demo](docs/demo.gif)
+![skillhub install demo](docs/discover-install.gif)
+
+One command. Every agent gets the right file in the right place.
 
 ---
 
-## What is a Skill?
+## What is a skill?
 
-A **skill** is a `.md` file that tells your AI agent *how* to approach a specific type of task — the methodology, the steps, the output format.
+A skill is a `.md` file that teaches your AI agent **how to approach a task** — the methodology, the steps, the output format.
 
-Without a skill, Claude Code figures it out from scratch every time. With a skill, it follows a proven workflow consistently.
+Without a skill, Claude figures out an approach from scratch every time. With `debug-agent` installed:
 
-**Example — what `code-reviewer` looks like inside:**
+```
+/debug-agent
 
-```markdown
----
-name: code-reviewer
-description: Five-axis code review for correctness, security, performance,
-             readability, and maintainability
-version: 1.0.0
-agents: [claude, cursor, codex, gemini]
-tags: [code-quality, review, security]
----
-
-# Code Reviewer
-
-You are an expert code reviewer. When asked to review code, always evaluate
-across five axes:
-
-## Review Axes
-
-**Correctness** — Does it do what it's supposed to do? Are there edge cases
-that break it? Off-by-one errors? Null handling?
-
-**Security** — OWASP Top 10. SQL injection, XSS, insecure deserialization,
-hardcoded secrets, improper auth.
-
-**Performance** — N+1 queries, unnecessary loops, blocking I/O, missing indexes.
-
-**Readability** — Can a new engineer understand this in 5 minutes?
-
-**Maintainability** — Will this be painful to change in 6 months?
-
-## Output Format
-
-For each file reviewed, output:
-1. A summary score per axis (1–5)
-2. Critical issues (must fix before merge)
-3. Suggestions (nice to have)
-4. One thing done well
+I'm getting: TypeError: Cannot read properties of undefined (reading 'map')
 ```
 
-When you run `skillhub install code-reviewer`, this file lands in exactly the right place for your agent — `.claude/commands/code-reviewer.md` for Claude Code, `.cursor/rules/code-reviewer.mdc` for Cursor, and so on.
-
-Now every time you say **"review this PR"**, your agent follows this exact methodology. Every project. Every teammate.
+Claude now follows a **6-phase discipline** — builds a feedback loop first, reproduces the bug before guessing, hypothesizes before touching code. Every time. Consistently.
 
 ---
 
-## Why skillhub?
+## Find the right skill
 
-Before skillhub, using a skill meant this:
+![skillhub search demo](docs/search.gif)
 
 ```bash
-# Find the skill on GitHub...
-# Clone the repo...
-# Figure out the right path for your agent...
-cp skills/research-agent.md .claude/commands/
-cp skills/research-agent.md .cursor/rules/research-agent.mdc
-# Switch projects → do it all again
-# New teammate → send them the link → they do it all again
+skillhub search "security"          # search by keyword
+skillhub search "react" --tag ui    # filter by tag
+skillhub list                       # browse all 22 skills
+skillhub info debug-agent           # preview before installing
 ```
 
-No versioning. No search. No way to combine skills. Every agent needs files in different places.
+---
 
-**skillhub fixes this:**
+## Compose skills — the killer feature
+
+Merge multiple skills into one expert that applies all their knowledge at once.
+
+![skillhub compose demo](docs/compose.gif)
 
 ```bash
-skillhub install research-agent --all-agents
-# ✓ Claude Code  → .claude/commands/research-agent.md
-# ✓ Cursor       → .cursor/rules/research-agent.mdc
-# ✓ Codex        → AGENTS.md
-# ✓ Gemini CLI   → .gemini/skills/research-agent.md
+# Building a FastAPI backend? Combine 3 skills into one expert:
+skillhub compose python-patterns security-review api-design -o fastapi-expert
 ```
 
-One command. Every agent. Every project.
+**What happens:**
+- All sections merged intelligently
+- Conflicts detected and resolved (first-writer wins, you're told what was kept)
+- One file written to your agent's commands folder
+
+```bash
+# In Claude Code:
+/fastapi-expert
+```
+
+Now your agent applies Python conventions, OWASP security, and REST best practices in every response — without you prompting for each.
+
+---
+
+## Create your own skill
+
+![skillhub init demo](docs/init.gif)
+
+```bash
+skillhub init our-coding-standards
+# Edit our-coding-standards/SKILL.md
+skillhub install our-coding-standards    # test locally
+skillhub publish our-coding-standards/  # share with the community
+```
+
+Encode your team's conventions once. Everyone on the team installs it. Every AI agent follows the same standards.
 
 ---
 
@@ -117,75 +106,32 @@ Requires Python 3.9+.
 skillhub --help  # verify it works
 ```
 
+> **Note:** Run `skillhub install` from inside your project folder, not from `/` or your home directory.
+
 ---
 
 ## Quick Start
 
-### 1. Find a skill
-
 ```bash
-skillhub search "debug"           # search by keyword
-skillhub search "react" --tag ui  # filter by tag
-skillhub list                     # browse all 22 skills
-skillhub info research-agent      # full details on one skill
+# 1. Find a skill
+skillhub list
+skillhub search "debug"
+
+# 2. Install it
+skillhub install debug-agent                    # Claude Code (default)
+skillhub install debug-agent --all-agents       # all 4 agents at once
+skillhub install debug-agent --dry-run          # preview first
+
+# 3. Use it in Claude Code
+# Type: /debug-agent
+# (Restart Claude Code if the command isn't showing yet)
+
+# 4. Combine skills
+skillhub compose research-agent code-reviewer -o smart-reviewer
+
+# 5. Create your own
+skillhub init my-skill
 ```
-
-### 2. Install it
-
-```bash
-# For Claude Code (default)
-skillhub install research-agent
-
-# For a specific agent
-skillhub install react-patterns --agent cursor
-
-# For ALL agents at once
-skillhub install debug-agent --all-agents
-
-# Preview before writing any files
-skillhub install security-review --dry-run
-```
-
-### 3. Use it
-
-Open your agent and use the skill by name. In Claude Code, type `/research-agent`. In Cursor, the rule activates automatically based on context.
-
-### 4. Manage skills
-
-```bash
-skillhub list --installed    # what's installed in this project
-skillhub update              # pull latest versions
-skillhub uninstall debug-agent
-```
-
----
-
-## Skill Composer
-
-The killer feature. Merge multiple skills into one unified file:
-
-```bash
-skillhub compose research-agent code-reviewer security-review -o deep-review
-```
-
-**What happens:**
-- Descriptions are merged
-- Sections are combined without duplication
-- Conflicts detected and resolved (first-writer wins, reported to you)
-- One file written to your agent's path
-
-**Preview before composing:**
-```bash
-skillhub compose debug-agent test-writer --dry-run -o qa-skill
-```
-
-**Real example:** Building a FastAPI backend?
-
-```bash
-skillhub compose python-patterns security-review api-design -o fastapi-expert
-```
-
-Now your agent has expertise in Python conventions, OWASP security, and REST best practices — in a single command.
 
 ---
 
@@ -241,10 +187,6 @@ Now your agent has expertise in Python conventions, OWASP security, and REST bes
 |-------|-------------|
 | `yc-job-tracker` | Daily AI/ML job tracking at YC startups |
 
-```bash
-skillhub info <name>  # see full skill content before installing
-```
-
 ---
 
 ## Supported Agents
@@ -273,7 +215,21 @@ skillhub info <name>  # see full skill content before installing
 | `skillhub uninstall <name>` | Remove a skill |
 | `skillhub update` | Update all installed skills to latest |
 | `skillhub compose <a> <b> -o <name>` | Merge multiple skills into one |
+| `skillhub init <name>` | Scaffold a new skill locally |
 | `skillhub publish <path>` | Submit your skill to the registry |
+
+---
+
+## Cookbook
+
+Common copy-paste recipes → **[docs/cookbook.md](docs/cookbook.md)**
+
+- Debug a bug you can't explain
+- Code review before opening a PR
+- Build a FastAPI backend with full expert context
+- Give your agent your team's coding standards
+- Research before building
+- Install everything for all agents at once
 
 ---
 
@@ -291,13 +247,15 @@ skillhub install research-agent
          ▼
 ┌─────────────────────────────────────┐
 │  Download skills/research-agent/    │  falls back to bundled if offline
-│  SKILL.md (or agent-specific file)  │
+│  SKILL.md                           │
 └─────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────┐
 │  Write to the correct agent path    │
 │  .claude/commands/research-agent.md │
+│                                     │
+│  Also writes .claude/skills.json    │  lightweight index for agent routing
 └─────────────────────────────────────┘
          │
          ▼
@@ -317,35 +275,6 @@ Works offline — skillhub bundles all 22 skills locally and falls back automati
 
 ---
 
-## Publish Your Own Skill
-
-Have a skill that saves you time? Share it:
-
-```bash
-skillhub publish ./my-skill-folder
-```
-
-This opens a guided GitHub PR flow. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide and quality bar.
-
-A skill needs one file — `SKILL.md` with YAML frontmatter:
-
-```markdown
----
-name: my-skill
-description: What this skill makes your agent do
-version: 1.0.0
-agents: [claude, cursor, codex, gemini]
-tags: [relevant, tags]
-author: your-github-username
----
-
-# My Skill
-
-Your methodology here...
-```
-
----
-
 ## Troubleshooting
 
 **Skill not found?**
@@ -357,6 +286,14 @@ skillhub list                    # browse everything
 **Already installed?**
 ```bash
 skillhub install <name> --overwrite
+```
+
+**Command not showing in Claude Code?**
+```bash
+# Restart Claude Code after installing
+# Make sure you're in a project folder, not /
+cd my-project
+skillhub install <name>
 ```
 
 **Network issues?**
@@ -376,6 +313,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 2. Add your skill under `skills/<name>/SKILL.md`
 3. Add the entry to `registry/index.json`
 4. Open a PR — we review for usefulness, not quantity
+
+Or use `skillhub init <name>` to scaffold the template, then `skillhub publish <name>/` to open a guided PR flow.
 
 ---
 
