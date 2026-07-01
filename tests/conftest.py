@@ -86,7 +86,7 @@ def mock_cache_dir(tmp_path):
 
 
 @pytest.fixture
-def mock_httpx_success(sample_index, sample_skill_content):
+def mock_httpx_success(sample_index, sample_skill_content, tmp_path):
     """Mock httpx to return successful responses."""
     class MockResponse:
         def __init__(self, content, status_code=200):
@@ -110,8 +110,19 @@ def mock_httpx_success(sample_index, sample_skill_content):
             return MockResponse(sample_skill_content)
         return MockResponse({}, 404)
 
+    # Use a fresh temp cache dir so the real on-disk cache (with 22 real skills)
+    # doesn't shadow the mock index that only contains test-skill/another-skill.
+    # Also mock _bundled_index: fetch_index prefers the index with MORE skills,
+    # so if bundled has 22 and mock returns 2, bundled always wins — break that tie.
+    from skillhub import registry as _reg
+    cache_dir = tmp_path / ".skillhub" / "cache"
+    cache_file = cache_dir / "index.json"
+
     with patch("httpx.get", side_effect=mock_get):
-        yield
+        with patch.object(_reg, "CACHE_DIR", cache_dir):
+            with patch.object(_reg, "CACHE_FILE", cache_file):
+                with patch.object(_reg, "_bundled_index", return_value=sample_index):
+                    yield
 
 
 @pytest.fixture
