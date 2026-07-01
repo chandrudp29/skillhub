@@ -193,6 +193,15 @@ def install(
     from .registry import get_skill
     from .adapters import get_install_path, AGENTS
 
+    # Guard: refuse to install into system/root directories
+    cwd = Path.cwd()
+    cwd_parts = cwd.parts
+    if len(cwd_parts) <= 1 or (len(cwd_parts) == 2 and cwd_parts[0] == "/" and cwd_parts[1] in ("usr", "bin", "etc", "var", "tmp", "root")):
+        console.print("[red]Error:[/] You are not inside a project directory.")
+        console.print("  [dim]cd to your project first, then run:[/]")
+        console.print(f"  [bold]skillhub install {name}[/]\n")
+        raise typer.Exit(1)
+
     # Validate skill exists first
     skill_meta = get_skill(name)
     if not skill_meta:
@@ -231,11 +240,17 @@ def install(
         console.print(f"[red]Error:[/] {e}")
         raise typer.Exit(1)
 
+    agents_installed = set(installed.keys())
     for tgt, path in installed.items():
         rel = path.relative_to(Path.cwd()) if path.is_absolute() else path
         console.print(f"  [green]✓[/] {AGENT_LABELS.get(tgt, tgt)} → [dim]{rel}[/]")
 
-    console.print(f"\n[green]Done![/] Skill [bold]{name}[/] is ready.\n")
+    console.print(f"\n[green]Done![/] Skill [bold]{name}[/] is ready.")
+
+    if "claude" in agents_installed:
+        console.print(f"  [dim]→ In Claude Code, type [bold]/{name}[/] to use it.[/]")
+        console.print("  [dim]→ Restart Claude Code if the command isn't showing yet.[/]")
+    console.print()
 
 
 @app.command()
