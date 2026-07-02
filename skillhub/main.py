@@ -410,7 +410,7 @@ def compose(
     missing = [s for s in skills if not _is_external(s) and not get_skill(s)]
     if missing:
         console.print(f"[red]Error:[/] Skill(s) not found in registry: {', '.join(missing)}")
-        console.print(f"Tip: [dim]Use 'skills.sh:name' to pull from skills.sh, or check: skillhub list[/]")
+        console.print("Tip: [dim]Use 'skills.sh:name' to pull from skills.sh, or check: skillhub list[/]")
         raise typer.Exit(1)
 
     if dry_run:
@@ -512,12 +512,12 @@ def diff(
     console.print(f"\n  [green]{total_unique} unique section(s)[/]  [yellow]{len(conflicts)} conflict(s)[/]")
 
     if conflicts:
-        console.print(f"\n[dim]Compose with default (first-wins):[/]")
+        console.print("\n[dim]Compose with default (first-wins):[/]")
         console.print(f"  skillhub compose {skill_a} {skill_b} -o merged")
-        console.print(f"[dim]Compose with AI merge (resolves conflicts intelligently):[/]")
+        console.print("[dim]Compose with AI merge (resolves conflicts intelligently):[/]")
         console.print(f"  skillhub compose {skill_a} {skill_b} -o merged --strategy ai")
     else:
-        console.print(f"\n[green]No conflicts — safe to compose:[/]")
+        console.print("\n[green]No conflicts — safe to compose:[/]")
         console.print(f"  skillhub compose {skill_a} {skill_b} -o merged")
     console.print()
 

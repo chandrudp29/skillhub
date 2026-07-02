@@ -6,7 +6,11 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 from skillhub import composer
-from skillhub.composer import ParsedSkill, _parse_skill, _detect_conflicts, compose
+from skillhub.composer import ParsedSkill, parse_skill, detect_conflicts, compose
+
+# backward-compat aliases so the rest of the test body stays readable
+_parse_skill = parse_skill
+_detect_conflicts = detect_conflicts
 
 
 class TestParseSkill:
@@ -86,8 +90,8 @@ class TestDetectConflicts:
     def test_no_conflicts(self):
         """Should return empty list when no conflicts."""
         skills = [
-            ParsedSkill("a", "desc", {}, "", {"Section A": "content"}),
-            ParsedSkill("b", "desc", {}, "", {"Section B": "content"}),
+            ParsedSkill("a", "a", "desc", {}, "", sections={"Section A": "content"}),
+            ParsedSkill("b", "b", "desc", {}, "", sections={"Section B": "content"}),
         ]
         conflicts = _detect_conflicts(skills)
         assert conflicts == []
@@ -95,21 +99,23 @@ class TestDetectConflicts:
     def test_detect_section_conflict(self):
         """Should detect duplicate section titles."""
         skills = [
-            ParsedSkill("a", "desc", {}, "", {"When to Use": "content a"}),
-            ParsedSkill("b", "desc", {}, "", {"When to Use": "content b"}),
+            ParsedSkill("a", "a", "desc", {}, "", sections={"When to Use": "content a"}),
+            ParsedSkill("b", "b", "desc", {}, "", sections={"When to Use": "content b"}),
         ]
         conflicts = _detect_conflicts(skills)
 
+        # detect_conflicts returns list[tuple[section_title, owner_a, owner_b]]
         assert len(conflicts) == 1
-        assert "When to Use" in conflicts[0]
-        assert "'a'" in conflicts[0]
-        assert "'b'" in conflicts[0]
+        section_title, owner_a, owner_b = conflicts[0]
+        assert section_title == "When to Use"
+        assert owner_a == "a"
+        assert owner_b == "b"
 
     def test_preamble_not_conflict(self):
         """__preamble__ sections should not be treated as conflicts."""
         skills = [
-            ParsedSkill("a", "desc", {}, "", {"__preamble__": "intro a"}),
-            ParsedSkill("b", "desc", {}, "", {"__preamble__": "intro b"}),
+            ParsedSkill("a", "a", "desc", {}, "", sections={"__preamble__": "intro a"}),
+            ParsedSkill("b", "b", "desc", {}, "", sections={"__preamble__": "intro b"}),
         ]
         conflicts = _detect_conflicts(skills)
         assert conflicts == []
