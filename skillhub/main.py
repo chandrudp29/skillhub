@@ -22,7 +22,30 @@ app = typer.Typer(
 )
 console = Console()
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
+
+COMPOSE_TEMPLATES: dict[str, dict] = {
+    "fastapi-expert": {
+        "skills": ["python-patterns", "security-review", "api-design"],
+        "description": "FastAPI backend expert: Python best practices + OWASP security + REST design",
+    },
+    "fullstack-expert": {
+        "skills": ["react-patterns", "python-patterns", "api-design"],
+        "description": "Full-stack expert: React 18+ frontend + Python backend + REST API",
+    },
+    "ml-platform": {
+        "skills": ["agent-builder", "mle-workflow", "llm-evaluator"],
+        "description": "ML platform engineer: LangGraph agents + ML workflow + LLM evaluation",
+    },
+    "pre-pr-reviewer": {
+        "skills": ["code-reviewer", "security-review", "test-writer"],
+        "description": "Pre-PR expert: code quality + security audit + test coverage",
+    },
+    "research-analyst": {
+        "skills": ["research-agent", "rag-evaluator", "doc-generator"],
+        "description": "Research analyst: deep research + RAG evaluation + documentation",
+    },
+}
 
 
 def _suggest_similar(name: str, threshold: float = 0.6) -> list[str]:
@@ -312,45 +335,79 @@ def update(
 
 @app.command()
 def compose(
-    skills: list[str] = typer.Argument(..., help="Two or more skill names to merge"),
+    skills: list[str] = typer.Argument(None, help="Skill names or sources to merge (skills.sh:name, github:owner/repo/path, ./local.md)"),
     output: str = typer.Option("composed-skill", "--output", "-o", help="Name for the composed skill"),
     agent: str = _agent_option(),
+    strategy: str = typer.Option("first-wins", "--strategy", "-s", help="Merge strategy: first-wins or ai"),
+    template: Optional[str] = typer.Option(None, "--template", "-t", help="Use a pre-built compose template"),
     no_install: bool = typer.Option(False, "--no-install", help="Print composed skill, don't write to disk"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Show what would be composed without writing files"),
 ):
     """
     Compose multiple skills into one unified skill file.
 
-    Example:
-      skillhub compose research-agent rag-evaluator code-reviewer
+    Pull from any source: skillhub registry, skills.sh, GitHub, or local files.
+
+    Examples:
+      skillhub compose python-patterns security-review -o secure-python
+      skillhub compose python-patterns security-review -o secure-python --strategy ai
+      skillhub compose skills.sh:react-expert ./my-local.md -o my-expert
+      skillhub compose github:addyosmani/agent-skills/skills/code-review-and-quality/SKILL.md debug-agent -o reviewer
+      skillhub compose --template fastapi-expert
     """
-    from .composer import compose as _compose
+    from .composer import compose as _compose, _is_external
     from .registry import get_skill
     from .adapters import get_install_path
 
-    if len(skills) < 2:
-        console.print("[red]Compose needs at least 2 skills.[/]")
+    # Expand template
+    if template:
+        if template not in COMPOSE_TEMPLATES:
+            console.print(f"[red]Unknown template '{template}'.[/] Available:")
+            for name, t in COMPOSE_TEMPLATES.items():
+                console.print(f"  [cyan]{name}[/]  [dim]{t['description']}[/]")
+            raise typer.Exit(1)
+        tmpl = COMPOSE_TEMPLATES[template]
+        skills = tmpl["skills"]
+        if output == "composed-skill":
+            output = template
+        console.print(f"\n[dim]Template:[/] [bold]{template}[/]")
+        console.print(f"[dim]Expands to:[/] {' + '.join(f'[cyan]{s}[/]' for s in skills)}\n")
+
+    if not skills or len(skills) < 2:
+        console.print("[red]Compose needs at least 2 skills (or use --template).[/]")
+        console.print("\nExamples:")
+        console.print("  skillhub compose python-patterns security-review -o secure-python")
+        console.print("  skillhub compose --template fastapi-expert")
+        console.print("  skillhub templates")
         raise typer.Exit(1)
 
-    # Validate all skills exist
-    missing = [s for s in skills if not get_skill(s)]
+    if strategy not in ("first-wins", "ai"):
+        console.print("[red]--strategy must be 'first-wins' or 'ai'[/]")
+        raise typer.Exit(1)
+
+    # Validate registry skills (skip external sources)
+    missing = [s for s in skills if not _is_external(s) and not get_skill(s)]
     if missing:
-        console.print(f"[red]Error:[/] Skill(s) not found: {', '.join(missing)}")
+        console.print(f"[red]Error:[/] Skill(s) not found in registry: {', '.join(missing)}")
+        console.print(f"Tip: [dim]Use 'skills.sh:name' to pull from skills.sh, or check: skillhub list[/]")
         raise typer.Exit(1)
 
     if dry_run:
         console.print("\n[bold][DRY RUN][/] Would compose:\n")
         for s in skills:
-            skill_meta = get_skill(s) or {}
-            console.print(f"  [cyan]{s}[/] v{skill_meta.get('version', '1.0.0')}")
+            prefix = "[dim](external)[/] " if _is_external(s) else ""
+            console.print(f"  [cyan]{s}[/] {prefix}")
         console.print(f"\n  → Output: [bold]{output}[/]")
+        console.print(f"  → Strategy: [bold]{strategy}[/]")
         path = get_install_path(agent, output, Path.cwd())
         rel = path.relative_to(Path.cwd()) if path.is_absolute() else path
         console.print(f"  → Path: [dim]{rel}[/]")
         console.print("\n[dim]Run without --dry-run to compose.[/]\n")
         return
 
-    console.print(f"\n[bold]Composing[/] {' + '.join(f'[cyan]{s}[/]' for s in skills)} → [bold]{output}[/]\n")
+    strategy_label = "[bold magenta]AI-powered merge[/]" if strategy == "ai" else "first-wins"
+    console.print(f"\n[bold]Composing[/] {' + '.join(f'[cyan]{s}[/]' for s in skills)}")
+    console.print(f"[dim]Strategy:[/] {strategy_label}  →  [bold]{output}[/]\n")
 
     try:
         composed, conflicts = _compose(
@@ -358,15 +415,18 @@ def compose(
             output_name=output,
             agent=agent,
             install=not no_install,
+            strategy=strategy,
         )
     except (ValueError, RuntimeError) as e:
         console.print(f"[red]Error:[/] {e}")
         raise typer.Exit(1)
 
     if conflicts:
-        console.print("[yellow]Conflicts resolved (first-writer wins):[/]")
+        label = "[magenta]AI-merged[/]" if strategy == "ai" else "[yellow]Conflicts resolved (first-wins):[/]"
+        console.print(f"{label}")
         for c in conflicts:
-            console.print(f"  [yellow]⚠[/] {c}")
+            icon = "[magenta]✦[/]" if strategy == "ai" else "[yellow]⚠[/]"
+            console.print(f"  {icon} {c}")
         console.print()
 
     if no_install:
@@ -374,7 +434,89 @@ def compose(
     else:
         path_template = AGENT_PATHS.get(agent, ".claude/commands/{name}.md")
         out_path = path_template.format(name=output) if "{name}" in path_template else path_template
-        console.print(f"[green]✓[/] Written to [bold]{out_path}[/]\n")
+        console.print(f"[green]✓[/] Written to [bold]{out_path}[/]")
+        if agent == "claude":
+            console.print(f"  [dim]→ In Claude Code, type [bold]/{output}[/] to use it.[/]")
+        console.print()
+
+
+@app.command()
+def diff(
+    skill_a: str = typer.Argument(..., help="First skill (name, skills.sh:name, github:owner/repo/path, ./local.md)"),
+    skill_b: str = typer.Argument(..., help="Second skill to compare against"),
+    agent: str = _agent_option(),
+):
+    """
+    Compare two skills section by section before composing.
+
+    Shows which sections are unique to each skill and which will conflict.
+
+    Examples:
+      skillhub diff python-patterns react-patterns
+      skillhub diff python-patterns skills.sh:react-expert
+    """
+    from .composer import diff as _diff
+    from rich.table import Table
+
+    console.print(f"\n[bold]Comparing[/] [cyan]{skill_a}[/] ← → [cyan]{skill_b}[/]\n")
+
+    try:
+        result = _diff(skill_a, skill_b, agent)
+    except (ValueError, RuntimeError) as e:
+        console.print(f"[red]Error:[/] {e}")
+        raise typer.Exit(1)
+
+    name_a = result["skill_a_name"]
+    name_b = result["skill_b_name"]
+    only_a = result["only_a"]
+    only_b = result["only_b"]
+    conflicts = result["conflicts"]
+
+    table = Table(box=box.ROUNDED, show_header=True, header_style="bold magenta")
+    table.add_column("Section", style="bold", min_width=28)
+    table.add_column(f"{name_a}", min_width=16, justify="center")
+    table.add_column(f"{name_b}", min_width=16, justify="center")
+    table.add_column("Status", min_width=12)
+
+    for s in only_a:
+        table.add_row(s, "[green]✓ here[/]", "[dim]—[/]", "[green]unique[/]")
+    for s in conflicts:
+        table.add_row(s, "[yellow]✓ here[/]", "[yellow]✓ here[/]", "[yellow]⚠ conflict[/]")
+    for s in only_b:
+        table.add_row(s, "[dim]—[/]", "[blue]✓ here[/]", "[blue]unique[/]")
+
+    console.print(table)
+
+    total_unique = len(only_a) + len(only_b)
+    console.print(f"\n  [green]{total_unique} unique section(s)[/]  [yellow]{len(conflicts)} conflict(s)[/]")
+
+    if conflicts:
+        console.print(f"\n[dim]Compose with default (first-wins):[/]")
+        console.print(f"  skillhub compose {skill_a} {skill_b} -o merged")
+        console.print(f"[dim]Compose with AI merge (resolves conflicts intelligently):[/]")
+        console.print(f"  skillhub compose {skill_a} {skill_b} -o merged --strategy ai")
+    else:
+        console.print(f"\n[green]No conflicts — safe to compose:[/]")
+        console.print(f"  skillhub compose {skill_a} {skill_b} -o merged")
+    console.print()
+
+
+@app.command()
+def templates():
+    """List all built-in compose templates."""
+    console.print()
+    table = Table(box=box.ROUNDED, show_header=True, header_style="bold magenta", title="[bold]Compose Templates[/]")
+    table.add_column("Template", style="bold cyan", min_width=20)
+    table.add_column("Skills", min_width=40)
+    table.add_column("Description", min_width=40)
+
+    for name, tmpl in COMPOSE_TEMPLATES.items():
+        skills_str = " + ".join(tmpl["skills"])
+        table.add_row(name, skills_str, tmpl["description"])
+
+    console.print(table)
+    console.print("\n[dim]Use a template:[/]  [bold]skillhub compose --template fastapi-expert[/]")
+    console.print("[dim]With AI merge:[/]   [bold]skillhub compose --template fastapi-expert --strategy ai[/]\n")
 
 
 @app.command(name="init")

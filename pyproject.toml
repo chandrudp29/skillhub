@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "skillhub-ai"
-version = "0.1.2"
-description = "The package manager for AI agent skills — install, compose, and publish skills for Claude Code, Cursor, Codex, and Gemini CLI"
+version = "0.2.0"
+description = "The skill composer for AI agents — compose, diff, and merge skills from any source with AI-powered conflict resolution"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.9"
@@ -14,7 +14,7 @@ authors = [
 ]
 keywords = [
     "ai", "agents", "skills", "claude", "cursor", "codex", "gemini",
-    "llm", "claude-code", "package-manager"
+    "llm", "claude-code", "package-manager", "compose", "skill-composer"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -49,6 +49,9 @@ skillhub = "skillhub.main:app"
 dev = [
     "pytest>=8.0.0",
     "pytest-cov>=4.0.0",
+]
+ai = [
+    "anthropic>=0.40.0",
 ]
 
 [tool.hatch.build.targets.wheel]

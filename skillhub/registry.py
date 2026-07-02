@@ -104,6 +104,52 @@ def list_all_skills() -> list[dict]:
     return fetch_index().get("skills", [])
 
 
+def fetch_from_source(source: str, agent: str = "claude") -> tuple[Optional[str], str]:
+    """Fetch skill content from any source. Returns (content, display_name).
+
+    Source formats:
+      name              → skillhub registry
+      skills.sh:name    → vercel-labs/skills repo
+      github:owner/repo/path/SKILL.md  → GitHub raw
+      ./local/path.md   → local file
+    """
+    if source.startswith(("./", "/", "../")):
+        p = Path(source)
+        if p.exists():
+            return p.read_text(), p.stem
+        return None, source
+
+    if source.startswith("github:"):
+        path = source[7:]
+        parts = path.split("/", 2)
+        if len(parts) >= 3:
+            owner, repo, file_path = parts[0], parts[1], parts[2]
+            url = f"https://raw.githubusercontent.com/{owner}/{repo}/main/{file_path}"
+            try:
+                resp = httpx.get(url, timeout=10)
+                if resp.status_code == 200:
+                    return resp.text, file_path.split("/")[-1].replace(".md", "")
+            except Exception:
+                pass
+        return None, source
+
+    if source.startswith("skills.sh:"):
+        skill_name = source[10:]
+        for branch in ("main", "master"):
+            url = f"https://raw.githubusercontent.com/vercel-labs/skills/{branch}/skills/{skill_name}/SKILL.md"
+            try:
+                resp = httpx.get(url, timeout=10)
+                if resp.status_code == 200:
+                    return resp.text, f"skills.sh/{skill_name}"
+            except Exception:
+                pass
+        return None, skill_name
+
+    # Default: skillhub registry
+    content = fetch_skill_content(source, agent)
+    return content, source
+
+
 def fetch_skill_content(name: str, agent: str = "claude") -> Optional[str]:
     skill = get_skill(name)
     if not skill:

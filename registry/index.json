@@ -1,6 +1,6 @@
 {
   "version": "1.1.0",
-  "updated_at": "2026-06-30",
+  "updated_at": "2026-07-02",
   "skills": [
     {
       "name": "agent-builder",
@@ -661,6 +661,147 @@
         "job tracker",
         "hiring"
       ]
+    },
+    {
+      "name": "frontend-developer",
+      "display_name": "Frontend Developer",
+      "description": "Expert frontend developer persona \u2014 React/Vue/Angular, performance optimization, Core Web Vitals, accessibility. Builds responsive web apps with pixel-perfect precision.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "frontend",
+        "react",
+        "typescript",
+        "performance",
+        "accessibility",
+        "web",
+        "css"
+      ],
+      "triggers": [
+        "react",
+        "vue",
+        "angular",
+        "frontend",
+        "component",
+        "ui implementation",
+        "web app",
+        "responsive",
+        "css",
+        "typescript ui"
+      ],
+      "author": "msitarzewski",
+      "source": "agency-agents",
+      "source_url": "https://github.com/msitarzewski/agency-agents",
+      "license": "MIT"
+    },
+    {
+      "name": "backend-architect",
+      "display_name": "Backend Architect",
+      "description": "Senior backend architect persona \u2014 scalable system design, database architecture, API contracts, microservices, observability, and security-first engineering.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "backend",
+        "architecture",
+        "database",
+        "api",
+        "microservices",
+        "scalability",
+        "postgresql",
+        "security"
+      ],
+      "triggers": [
+        "backend",
+        "api design",
+        "database schema",
+        "microservices",
+        "architecture",
+        "scalable system",
+        "rest api",
+        "server side",
+        "system design"
+      ],
+      "author": "msitarzewski",
+      "source": "agency-agents",
+      "source_url": "https://github.com/msitarzewski/agency-agents",
+      "license": "MIT"
+    },
+    {
+      "name": "penetration-tester",
+      "display_name": "Penetration Tester",
+      "description": "Authorized penetration tester persona \u2014 offensive security specialist for network, web app, cloud, and Active Directory assessments. Requires explicit authorization.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "security",
+        "pentest",
+        "red-team",
+        "owasp",
+        "vulnerability",
+        "ethical-hacking",
+        "active-directory"
+      ],
+      "triggers": [
+        "pentest",
+        "penetration test",
+        "security assessment",
+        "red team",
+        "ethical hacking",
+        "vulnerability assessment",
+        "security audit"
+      ],
+      "author": "msitarzewski",
+      "source": "agency-agents",
+      "source_url": "https://github.com/msitarzewski/agency-agents",
+      "license": "MIT"
+    },
+    {
+      "name": "career-ops",
+      "display_name": "Career Ops",
+      "description": "Global AI/ML job hunt \u2014 USA, Europe, Singapore, Dubai, remote-first startups. Daily fetch, score, and track Senior AI/ML Engineer roles with LangChain/LangGraph/agent stack.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "jobs",
+        "career",
+        "ai-ml",
+        "remote",
+        "startup",
+        "usa",
+        "europe",
+        "singapore",
+        "dubai"
+      ],
+      "triggers": [
+        "career ops",
+        "job search",
+        "find jobs",
+        "remote jobs",
+        "ai ml jobs",
+        "startup jobs",
+        "founding engineer"
+      ],
+      "author": "chandrudp29"
     }
   ]
 }
