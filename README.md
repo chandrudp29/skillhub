@@ -8,7 +8,7 @@
 
 **There are 50 tools to install AI agent skills. There is exactly one tool that merges them.**
 
-skillhub is the **skill composer** — merge skills from any source (skillhub registry, skills.sh, GitHub, local files) into one expert skill, with AI-powered conflict resolution.
+skillhub is the **skill composer** — merge skills from any source across 13 ecosystems (Anthropic, OpenAI, Copilot, Microsoft, Google, Vercel, Agency Agents, and more) into one expert skill, with AI-powered conflict resolution.
 
 ```bash
 pip install skillhub-ai
@@ -102,33 +102,59 @@ skillhub compose --template fastapi-expert --strategy ai   # with AI merge
 
 ---
 
-## Compose from any source — not just this registry
+## Compose from any source — every skill ecosystem on GitHub
 
 ![skillhub cross-ecosystem demo](docs/cross.gif)
 
 ```bash
-# Combine this registry with addyosmani's agent-skills on GitHub
-skillhub compose debug-agent \
-  github:addyosmani/agent-skills/skills/code-review-and-quality/SKILL.md \
-  -o super-reviewer
+# Merge an official Anthropic skill with an OpenAI skill and your local standards
+skillhub compose anthropic:claude-api openai:aspnet-core ./my-team-standards.md \
+  -o cloud-ai-expert
 
-# Combine skills.sh (Vercel's registry) with your local team standards
-skillhub compose skills.sh:react-expert ./my-team-standards.md -o team-expert
+# Mix GitHub Copilot + Microsoft official + Google Cloud skills
+skillhub compose copilot:acquire-codebase-knowledge \
+  microsoft:skill-creator \
+  google:agent-platform-deploy \
+  -o enterprise-expert
 
-# Mix everything
-skillhub compose python-patterns \
-  skills.sh:typescript-expert \
-  github:owner/repo/skills/custom/SKILL.md \
-  ./local-style.md \
-  -o polyglot-expert
+# Community skills from every corner of GitHub
+skillhub compose agency-agents:frontend-developer \
+  addyosmani:code-review-and-quality \
+  scientific:astropy \
+  antigravity:ab-test-setup \
+  -o community-expert
+
+# Gamedev skills across all engines
+skillhub compose gamedev:godot-best-practices \
+  skills.sh:react-expert \
+  python-patterns \
+  -o gamedev-web-expert
+
+# Use the raw github: escape hatch for anything not yet indexed
+skillhub compose github:owner/repo/path/to/SKILL.md python-patterns -o custom-expert
 ```
 
-| Source prefix | Where it fetches from |
-|--------------|----------------------|
-| `name` (no prefix) | skillhub registry (26 skills) |
-| `skills.sh:name` | Vercel's skills.sh registry |
-| `github:owner/repo/path/SKILL.md` | Any public GitHub repo |
-| `./path/to/file.md` | Local file on disk |
+| Source prefix | Ecosystem | GitHub repo |
+|--------------|-----------|-------------|
+| `name` (no prefix) | **skillhub** registry | chandrudp29/skillhub |
+| `anthropic:name` | **Anthropic** official skills | anthropics/skills |
+| `openai:name` | **OpenAI / Codex** official skills | openai/skills |
+| `copilot:name` | **GitHub Copilot** awesome skills | github/awesome-copilot |
+| `microsoft:name` | **Microsoft** official skills | microsoft/skills |
+| `google:name` | **Google** official skills | google/skills |
+| `skills.sh:name` | **Vercel** skills.sh registry | vercel-labs/skills |
+| `agency-agents:name` | **Agency Agents** role personas | msitarzewski/agency-agents |
+| `addyosmani:name` | **Addy Osmani** production skills | addyosmani/agent-skills |
+| `scientific:name` | **K-Dense AI** scientific skills | K-Dense-AI/scientific-agent-skills |
+| `antigravity:name` | **Antigravity / OpenClaw** community | sickn33/antigravity-awesome-skills |
+| `gamedev:name` | **Game Dev** skills | gamedev-skills/awesome-gamedev-agent-skills |
+| `tech-leads:name` | **Tech Leads Club** validated skills | tech-leads-club/agent-skills |
+| `claude:name` | Already in your **Claude Code** project | `.claude/commands/` |
+| `cursor:name` | Already in your **Cursor** project | `.cursor/rules/` |
+| `codex:name` | Already in your **Codex** project | `AGENTS.md` blocks |
+| `gemini:name` | Already in your **Gemini CLI** project | `.gemini/skills/` |
+| `github:owner/repo/path` | **Any public GitHub** file | raw.githubusercontent.com |
+| `./path/to/file.md` | **Local file** on disk | — |
 
 ---
 

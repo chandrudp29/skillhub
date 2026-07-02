@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "skillhub-ai"
-version = "0.2.0"
+version = "0.3.0"
 description = "The skill composer for AI agents — compose, diff, and merge skills from any source with AI-powered conflict resolution"
 readme = "README.md"
 license = { text = "MIT" }

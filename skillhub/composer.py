@@ -18,18 +18,25 @@ from .registry import fetch_from_source, fetch_skill_content, get_skill
 
 
 _EXTERNAL_PREFIXES = (
-    "skills.sh:",
-    "agency-agents:",
+    # Installed-agent prefixes (read from local project dir)
+    "claude:", "cursor:", "codex:", "gemini:",
+    # Remote ecosystem registries
+    "skills.sh:",       # Vercel (vercel-labs/skills)
+    "agency-agents:",   # msitarzewski/agency-agents
+    "anthropic:",       # anthropics/skills  (official)
+    "openai:",          # openai/skills  (official)
+    "copilot:",         # github/awesome-copilot  (official)
+    "microsoft:",       # microsoft/skills  (official)
+    "google:",          # google/skills  (official)
+    "addyosmani:",      # addyosmani/agent-skills
+    "scientific:",      # K-Dense-AI/scientific-agent-skills
+    "antigravity:",     # sickn33/antigravity-awesome-skills
+    "gamedev:",         # gamedev-skills/awesome-gamedev-agent-skills
+    "tech-leads:",      # tech-leads-club/agent-skills
+    # Raw GitHub / local / URL
     "github:",
-    "claude:",
-    "cursor:",
-    "codex:",
-    "gemini:",
-    "./",
-    "/",
-    "../",
-    "http://",
-    "https://",
+    "./", "/", "../",
+    "http://", "https://",
 )
 
 

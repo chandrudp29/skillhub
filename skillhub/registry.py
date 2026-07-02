@@ -164,60 +164,200 @@ def fetch_from_source(
         return None, source
 
     # ── Remote registries ───────────────────────────────────────────────────
+
+    def _gh_raw(owner: str, repo: str, path: str) -> Optional[str]:
+        """Fetch a raw file from GitHub, trying main then master branch."""
+        for branch in ("main", "master"):
+            try:
+                resp = httpx.get(
+                    f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{path}",
+                    timeout=10,
+                )
+                if resp.status_code == 200:
+                    return resp.text
+            except Exception:
+                pass
+        return None
+
+    def _try_paths(owner: str, repo: str, candidates: list[str]) -> Optional[str]:
+        for p in candidates:
+            content = _gh_raw(owner, repo, p)
+            if content:
+                return content
+        return None
+
+    # github:owner/repo/path/to/SKILL.md  — raw GitHub file
     if source.startswith("github:"):
         path = source[7:]
         parts = path.split("/", 2)
         if len(parts) >= 3:
             owner, repo, file_path = parts[0], parts[1], parts[2]
-            for branch in ("main", "master"):
-                url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{file_path}"
-                try:
-                    resp = httpx.get(url, timeout=10)
-                    if resp.status_code == 200:
-                        display = file_path.split("/")[-1].replace(".md", "").replace(".mdc", "")
-                        return resp.text, f"github/{display}"
-                except Exception:
-                    pass
+            content = _gh_raw(owner, repo, file_path)
+            if content:
+                display = file_path.split("/")[-1].replace(".md", "").replace(".mdc", "")
+                return content, f"github/{display}"
         return None, source
 
+    # skills.sh:name  — Vercel's open skills registry
     if source.startswith("skills.sh:"):
-        skill_name = source[10:]
-        for branch in ("main", "master"):
-            url = f"https://raw.githubusercontent.com/vercel-labs/skills/{branch}/skills/{skill_name}/SKILL.md"
-            try:
-                resp = httpx.get(url, timeout=10)
-                if resp.status_code == 200:
-                    return resp.text, f"skills.sh/{skill_name}"
-            except Exception:
-                pass
-        return None, skill_name
+        name = source[10:]
+        content = _gh_raw("vercel-labs", "skills", f"skills/{name}/SKILL.md")
+        if content:
+            return content, f"skills.sh/{name}"
+        return None, name
 
+    # anthropic:name  — Anthropic's official skills  (anthropics/skills)
+    if source.startswith("anthropic:"):
+        name = source[10:]
+        content = _try_paths("anthropics", "skills", [
+            f"skills/{name}/SKILL.md",
+            f"skills/{name}.md",
+        ])
+        if content:
+            return content, f"anthropic/{name}"
+        _log_warning(f"anthropic skill '{name}' not found in anthropics/skills/skills/")
+        return None, name
+
+    # openai:name  — OpenAI / Codex official skills  (openai/skills)
+    if source.startswith("openai:"):
+        name = source[7:]
+        content = _try_paths("openai", "skills", [
+            f"skills/.curated/{name}/SKILL.md",
+            f"skills/{name}/SKILL.md",
+            f"skills/.system/{name}/SKILL.md",
+        ])
+        if content:
+            return content, f"openai/{name}"
+        _log_warning(f"openai skill '{name}' not found in openai/skills")
+        return None, name
+
+    # copilot:name  — GitHub's awesome-copilot skills  (github/awesome-copilot)
+    if source.startswith("copilot:"):
+        name = source[8:]
+        content = _try_paths("github", "awesome-copilot", [
+            f"skills/{name}/SKILL.md",
+            f"skills/{name}.md",
+        ])
+        if content:
+            return content, f"copilot/{name}"
+        _log_warning(f"copilot skill '{name}' not found in github/awesome-copilot/skills/")
+        return None, name
+
+    # microsoft:name  — Microsoft official skills  (microsoft/skills)
+    if source.startswith("microsoft:"):
+        name = source[10:]
+        content = _try_paths("microsoft", "skills", [
+            f".github/skills/{name}/SKILL.md",
+            f"skills/{name}/SKILL.md",
+        ])
+        if content:
+            return content, f"microsoft/{name}"
+        _log_warning(f"microsoft skill '{name}' not found in microsoft/skills")
+        return None, name
+
+    # google:name  — Google official skills  (google/skills)
+    # skills are organized as skills/{category}/{name}/SKILL.md
+    if source.startswith("google:"):
+        name = source[7:]
+        _GOOGLE_CATEGORIES = ["cloud", "ads", "analytics"]
+        candidates_g = [f"skills/{cat}/{name}/SKILL.md" for cat in _GOOGLE_CATEGORIES]
+        candidates_g.append(f"skills/{name}/SKILL.md")
+        content = _try_paths("google", "skills", candidates_g)
+        if content:
+            return content, f"google/{name}"
+        _log_warning(f"google skill '{name}' not found. Categories: {_GOOGLE_CATEGORIES}")
+        return None, name
+
+    # addyosmani:name  — Addy Osmani's production-grade skills  (addyosmani/agent-skills)
+    if source.startswith("addyosmani:"):
+        name = source[11:]
+        content = _try_paths("addyosmani", "agent-skills", [
+            f"skills/{name}/SKILL.md",
+            f"skills/{name}.md",
+        ])
+        if content:
+            return content, f"addyosmani/{name}"
+        _log_warning(f"addyosmani skill '{name}' not found in addyosmani/agent-skills/skills/")
+        return None, name
+
+    # scientific:name  — K-Dense AI scientific skills  (K-Dense-AI/scientific-agent-skills)
+    if source.startswith("scientific:"):
+        name = source[11:]
+        content = _try_paths("K-Dense-AI", "scientific-agent-skills", [
+            f"skills/{name}/SKILL.md",
+            f"skills/{name}.md",
+        ])
+        if content:
+            return content, f"scientific/{name}"
+        _log_warning(f"scientific skill '{name}' not found in K-Dense-AI/scientific-agent-skills/skills/")
+        return None, name
+
+    # antigravity:name  — Antigravity/OpenClaw community skills  (sickn33/antigravity-awesome-skills)
+    if source.startswith("antigravity:"):
+        name = source[12:]
+        content = _try_paths("sickn33", "antigravity-awesome-skills", [
+            f"skills/{name}/SKILL.md",
+            f"skills/{name}.md",
+        ])
+        if content:
+            return content, f"antigravity/{name}"
+        _log_warning(f"antigravity skill '{name}' not found in sickn33/antigravity-awesome-skills/skills/")
+        return None, name
+
+    # gamedev:name  — Game dev skills  (gamedev-skills/awesome-gamedev-agent-skills)
+    # skills/{engine-or-discipline}/{name}/SKILL.md
+    if source.startswith("gamedev:"):
+        name = source[8:]
+        _GAMEDEV_CATS = ["disciplines", "genres", "godot", "unity", "other-engines"]
+        candidates_gd = [f"skills/{cat}/{name}/SKILL.md" for cat in _GAMEDEV_CATS]
+        candidates_gd.append(f"skills/{name}/SKILL.md")
+        content = _try_paths("gamedev-skills", "awesome-gamedev-agent-skills", candidates_gd)
+        if content:
+            return content, f"gamedev/{name}"
+        _log_warning(f"gamedev skill '{name}' not found. Categories: {_GAMEDEV_CATS}")
+        return None, name
+
+    # tech-leads:name  — Tech Leads Club validated skills  (tech-leads-club/agent-skills)
+    # packages/skills-catalog/skills/(category)/{name}/SKILL.md
+    if source.startswith("tech-leads:"):
+        name = source[11:]
+        _TL_CATS = [
+            "(architecture)", "(cloud)", "(creation)", "(decision-making)",
+            "(design)", "(development)", "(gtm)", "(learning)",
+            "(monitoring)", "(performance)", "(quality)", "(security)",
+            "(tooling)", "(web-automation)",
+        ]
+        candidates_tl = [
+            f"packages/skills-catalog/skills/{cat}/{name}/SKILL.md"
+            for cat in _TL_CATS
+        ]
+        candidates_tl.append(f"packages/skills-catalog/skills/{name}/SKILL.md")
+        content = _try_paths("tech-leads-club", "agent-skills", candidates_tl)
+        if content:
+            return content, f"tech-leads/{name}"
+        _log_warning(f"tech-leads skill '{name}' not found in tech-leads-club/agent-skills")
+        return None, name
+
+    # agency-agents:name  — msitarzewski/agency-agents (role-based personalities)
+    # {category}/{category}-{name}.md
     if source.startswith("agency-agents:"):
-        skill_name = source[14:]
-        # Files live in category folders named {category}/{category}-{skill}.md
-        # e.g. engineering/engineering-frontend-developer.md
+        name = source[14:]
         _AGENCY_CATEGORIES = [
             "engineering", "security", "design", "product", "testing",
             "strategy", "marketing", "sales", "finance", "support",
             "specialized", "academic", "game-development", "spatial-computing",
             "gis", "integrations", "paid-media", "project-management",
         ]
-        candidates: list[str] = []
-        for cat in _AGENCY_CATEGORIES:
-            candidates.append(f"{cat}/{cat}-{skill_name}.md")
-        # Also try direct name in root of each category
-        candidates.append(f"engineering/{skill_name}.md")
-        for file_path in candidates:
-            url = f"https://raw.githubusercontent.com/msitarzewski/agency-agents/main/{file_path}"
-            try:
-                resp = httpx.get(url, timeout=10)
-                if resp.status_code == 200:
-                    return resp.text, f"agency-agents/{skill_name}"
-            except Exception:
-                pass
-        _log_warning(f"agency-agents skill '{skill_name}' not found. "
-                     f"Try: github:msitarzewski/agency-agents/engineering/engineering-{skill_name}.md")
-        return None, skill_name
+        candidates_aa = [f"{cat}/{cat}-{name}.md" for cat in _AGENCY_CATEGORIES]
+        candidates_aa.append(f"engineering/{name}.md")
+        content = _try_paths("msitarzewski", "agency-agents", candidates_aa)
+        if content:
+            return content, f"agency-agents/{name}"
+        _log_warning(
+            f"agency-agents skill '{name}' not found. "
+            f"Try: github:msitarzewski/agency-agents/engineering/engineering-{name}.md"
+        )
+        return None, name
 
     # ── Default: skillhub registry ──────────────────────────────────────────
     content = fetch_skill_content(source, agent)
