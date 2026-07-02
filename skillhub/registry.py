@@ -104,33 +104,80 @@ def list_all_skills() -> list[dict]:
     return fetch_index().get("skills", [])
 
 
-def fetch_from_source(source: str, agent: str = "claude") -> tuple[Optional[str], str]:
+def fetch_from_source(
+    source: str,
+    agent: str = "claude",
+    project_root: Optional[Path] = None,
+) -> tuple[Optional[str], str]:
     """Fetch skill content from any source. Returns (content, display_name).
 
     Source formats:
-      name              → skillhub registry
-      skills.sh:name    → vercel-labs/skills repo
-      github:owner/repo/path/SKILL.md  → GitHub raw
-      ./local/path.md   → local file
+      name                    → skillhub registry
+      skills.sh:name          → vercel-labs/skills repo
+      agency-agents:name      → msitarzewski/agency-agents repo
+      github:owner/repo/path  → any public GitHub raw file
+      claude:name             → skill already installed in Claude Code (.claude/commands/)
+      cursor:name             → skill already installed in Cursor (.cursor/rules/)
+      codex:name              → skill already installed in Codex (AGENTS.md block)
+      gemini:name             → skill already installed in Gemini CLI (.gemini/skills/)
+      ./local/path.md         → local file on disk
     """
+    root = project_root or Path.cwd()
+
+    # ── Local file paths ────────────────────────────────────────────────────
     if source.startswith(("./", "/", "../")):
-        p = Path(source)
+        p = Path(source) if source.startswith("/") else root / source.lstrip("./")
+        if not p.exists():
+            p = Path(source)  # try as-is
         if p.exists():
             return p.read_text(), p.stem
         return None, source
 
+    # ── Already-installed agent skills ──────────────────────────────────────
+    _INSTALLED_PATHS = {
+        "claude":  (".claude", "commands", "{name}.md"),
+        "cursor":  (".cursor", "rules", "{name}.mdc"),
+        "gemini":  (".gemini", "skills", "{name}.md"),
+    }
+
+    for prefix, parts in _INSTALLED_PATHS.items():
+        tag = f"{prefix}:"
+        if source.startswith(tag):
+            skill_name = source[len(tag):]
+            p = root / parts[0] / parts[1] / parts[2].format(name=skill_name)
+            if p.exists():
+                return p.read_text(), f"{prefix}:{skill_name}"
+            _log_warning(f"Skill '{skill_name}' not found in {prefix} at {p}")
+            return None, source
+
+    if source.startswith("codex:"):
+        skill_name = source[6:]
+        agents_md = root / "AGENTS.md"
+        if agents_md.exists():
+            import re as _re
+            text = agents_md.read_text()
+            pattern = rf"<!-- skillhub:{_re.escape(skill_name)} -->(.*?)<!-- /skillhub:{_re.escape(skill_name)} -->"
+            m = _re.search(pattern, text, _re.DOTALL)
+            if m:
+                return m.group(1).strip(), f"codex:{skill_name}"
+        _log_warning(f"Skill '{skill_name}' not found in AGENTS.md")
+        return None, source
+
+    # ── Remote registries ───────────────────────────────────────────────────
     if source.startswith("github:"):
         path = source[7:]
         parts = path.split("/", 2)
         if len(parts) >= 3:
             owner, repo, file_path = parts[0], parts[1], parts[2]
-            url = f"https://raw.githubusercontent.com/{owner}/{repo}/main/{file_path}"
-            try:
-                resp = httpx.get(url, timeout=10)
-                if resp.status_code == 200:
-                    return resp.text, file_path.split("/")[-1].replace(".md", "")
-            except Exception:
-                pass
+            for branch in ("main", "master"):
+                url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{file_path}"
+                try:
+                    resp = httpx.get(url, timeout=10)
+                    if resp.status_code == 200:
+                        display = file_path.split("/")[-1].replace(".md", "").replace(".mdc", "")
+                        return resp.text, f"github/{display}"
+                except Exception:
+                    pass
         return None, source
 
     if source.startswith("skills.sh:"):
@@ -145,7 +192,34 @@ def fetch_from_source(source: str, agent: str = "claude") -> tuple[Optional[str]
                 pass
         return None, skill_name
 
-    # Default: skillhub registry
+    if source.startswith("agency-agents:"):
+        skill_name = source[14:]
+        # Files live in category folders named {category}/{category}-{skill}.md
+        # e.g. engineering/engineering-frontend-developer.md
+        _AGENCY_CATEGORIES = [
+            "engineering", "security", "design", "product", "testing",
+            "strategy", "marketing", "sales", "finance", "support",
+            "specialized", "academic", "game-development", "spatial-computing",
+            "gis", "integrations", "paid-media", "project-management",
+        ]
+        candidates: list[str] = []
+        for cat in _AGENCY_CATEGORIES:
+            candidates.append(f"{cat}/{cat}-{skill_name}.md")
+        # Also try direct name in root of each category
+        candidates.append(f"engineering/{skill_name}.md")
+        for file_path in candidates:
+            url = f"https://raw.githubusercontent.com/msitarzewski/agency-agents/main/{file_path}"
+            try:
+                resp = httpx.get(url, timeout=10)
+                if resp.status_code == 200:
+                    return resp.text, f"agency-agents/{skill_name}"
+            except Exception:
+                pass
+        _log_warning(f"agency-agents skill '{skill_name}' not found. "
+                     f"Try: github:msitarzewski/agency-agents/engineering/engineering-{skill_name}.md")
+        return None, skill_name
+
+    # ── Default: skillhub registry ──────────────────────────────────────────
     content = fetch_skill_content(source, agent)
     return content, source
 

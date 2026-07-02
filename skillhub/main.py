@@ -348,12 +348,33 @@ def compose(
 
     Pull from any source: skillhub registry, skills.sh, GitHub, or local files.
 
-    Examples:
+    Pull from any source and merge:
+
       skillhub compose python-patterns security-review -o secure-python
       skillhub compose python-patterns security-review -o secure-python --strategy ai
-      skillhub compose skills.sh:react-expert ./my-local.md -o my-expert
-      skillhub compose github:addyosmani/agent-skills/skills/code-review-and-quality/SKILL.md debug-agent -o reviewer
       skillhub compose --template fastapi-expert
+
+    Cross-platform — merge skills already installed across different agents:
+
+      skillhub compose claude:debug-agent cursor:debug-agent -o unified-debug
+      skillhub compose claude:python-patterns cursor:react-patterns -o fullstack
+
+    Cross-ecosystem — pull from any registry:
+
+      skillhub compose agency-agents:frontend-developer python-patterns -o frontend-expert
+      skillhub compose skills.sh:react-expert ./my-team-skill.md -o team-expert
+      skillhub compose github:addyosmani/agent-skills/skills/code-review-and-quality/SKILL.md debug-agent -o reviewer
+
+    Source prefixes:
+      name                        skillhub registry
+      claude:name                 installed in Claude Code  (.claude/commands/)
+      cursor:name                 installed in Cursor       (.cursor/rules/)
+      codex:name                  installed in Codex        (AGENTS.md block)
+      gemini:name                 installed in Gemini CLI   (.gemini/skills/)
+      agency-agents:name          msitarzewski/agency-agents repo
+      skills.sh:name              Vercel skills.sh registry
+      github:owner/repo/path.md   any public GitHub file
+      ./path/to/skill.md          local file on disk
     """
     from .composer import compose as _compose, _is_external
     from .registry import get_skill

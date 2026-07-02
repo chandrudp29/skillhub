@@ -17,8 +17,24 @@ import yaml
 from .registry import fetch_from_source, fetch_skill_content, get_skill
 
 
+_EXTERNAL_PREFIXES = (
+    "skills.sh:",
+    "agency-agents:",
+    "github:",
+    "claude:",
+    "cursor:",
+    "codex:",
+    "gemini:",
+    "./",
+    "/",
+    "../",
+    "http://",
+    "https://",
+)
+
+
 def _is_external(source: str) -> bool:
-    return source.startswith(("skills.sh:", "github:", "./", "/", "../", "http://", "https://"))
+    return source.startswith(_EXTERNAL_PREFIXES)
 
 
 @dataclass
@@ -162,7 +178,7 @@ def compose(
 
     for source in skill_sources:
         if _is_external(source):
-            content, display_name = fetch_from_source(source, agent)
+            content, display_name = fetch_from_source(source, agent, project_root=root)
             if not content:
                 raise RuntimeError(f"Could not fetch content from '{source}'")
             parsed.append(parse_skill(content, source, display_name))
@@ -248,13 +264,20 @@ def compose(
     return composed, conflict_log
 
 
-def diff(skill_a: str, skill_b: str, agent: str = "claude") -> dict:
+def diff(
+    skill_a: str,
+    skill_b: str,
+    agent: str = "claude",
+    project_root: Optional[Path] = None,
+) -> dict:
     """
     Compare two skills section by section.
     Returns a dict with keys: only_a, only_b, conflicts, skill_a_name, skill_b_name.
     """
+    root = project_root or Path.cwd()
+
     if _is_external(skill_a):
-        content_a, name_a = fetch_from_source(skill_a, agent)
+        content_a, name_a = fetch_from_source(skill_a, agent, project_root=root)
     else:
         content_a = fetch_skill_content(skill_a, agent)
         name_a = skill_a
@@ -262,7 +285,7 @@ def diff(skill_a: str, skill_b: str, agent: str = "claude") -> dict:
         raise ValueError(f"Could not fetch '{skill_a}'")
 
     if _is_external(skill_b):
-        content_b, name_b = fetch_from_source(skill_b, agent)
+        content_b, name_b = fetch_from_source(skill_b, agent, project_root=root)
     else:
         content_b = fetch_skill_content(skill_b, agent)
         name_b = skill_b
