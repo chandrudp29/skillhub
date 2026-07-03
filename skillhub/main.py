@@ -22,7 +22,7 @@ app = typer.Typer(
 )
 console = Console()
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 COMPOSE_TEMPLATES: dict[str, dict] = {
     "fastapi-expert": {
@@ -205,16 +205,43 @@ def info(
 
 @app.command()
 def install(
-    name: str = typer.Argument(..., help="Skill name to install"),
+    name: Optional[str] = typer.Argument(None, help="Skill name (omit to install all from skillhub.json)"),
     agent: str = _agent_option(),
     all_agents: bool = typer.Option(False, "--all-agents", help="Install for all supported agents"),
     overwrite: bool = typer.Option(False, "--overwrite", "-f", help="Overwrite if already installed"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Show what would be installed without writing files"),
 ):
-    """Install a skill into your project."""
+    """Install a skill, or install all skills declared in skillhub.json."""
     from .installer import install as _install
     from .registry import get_skill
     from .adapters import get_install_path, AGENTS
+
+    # No name given → read from skillhub.json manifest
+    if name is None:
+        from .manifest import get_manifest_skills, manifest_path
+        manifest_skills = get_manifest_skills()
+        if not manifest_skills:
+            mp = manifest_path()
+            if not mp.exists():
+                console.print("[yellow]No skillhub.json found.[/] Add skills first:")
+                console.print("  [bold]skillhub add python-patterns[/]")
+            else:
+                console.print("[yellow]skillhub.json has no skills declared.[/]")
+                console.print("  [bold]skillhub add python-patterns[/]")
+            raise typer.Exit(1)
+
+        console.print(f"\n[bold]Installing {len(manifest_skills)} skill(s) from skillhub.json...[/]\n")
+        ok, fail = 0, 0
+        for skill_name in manifest_skills:
+            try:
+                _install(skill_name, agent=agent, all_agents=all_agents, overwrite=overwrite)
+                console.print(f"  [green]✓[/] {skill_name}")
+                ok += 1
+            except Exception as e:
+                console.print(f"  [red]✗[/] {skill_name}: {e}")
+                fail += 1
+        console.print(f"\n[green]{ok} installed[/]" + (f", [red]{fail} failed[/]" if fail else "") + "\n")
+        return
 
     # Validate skill exists first
     skill_meta = get_skill(name)
@@ -331,6 +358,96 @@ def update(
         except Exception as e:
             console.print(f"  [red]✗[/] {name}: {e}")
     console.print()
+
+
+@app.command()
+def add(
+    name: str = typer.Argument(..., help="Skill name to add (records in skillhub.json and installs)"),
+    agent: str = _agent_option(),
+    all_agents: bool = typer.Option(False, "--all-agents", help="Install for all supported agents"),
+    no_install: bool = typer.Option(False, "--no-manifest", help="Install only, don't update skillhub.json"),
+):
+    """
+    Add a skill to skillhub.json and install it (like npm install --save).
+
+    Creates skillhub.json if it doesn't exist yet.
+
+    Examples:
+      skillhub add python-patterns
+      skillhub add agency-agents:frontend-developer --agent cursor
+      skillhub add anthropic:claude-api
+    """
+    from .installer import install as _install
+    from .registry import get_skill
+    from .manifest import add_to_manifest, manifest_path
+    from .composer import _is_external
+
+    # Validate registry skills (allow external prefixes through)
+    if not _is_external(name):
+        skill_meta = get_skill(name)
+        if not skill_meta:
+            console.print(f"[red]Error:[/] Skill '{name}' not found in registry.")
+            suggestions = _suggest_similar(name)
+            if suggestions:
+                console.print(f"[yellow]Did you mean:[/] {', '.join(f'[cyan]{s}[/]' for s in suggestions)}")
+            console.print(f"\nTry: [bold]skillhub search {name}[/] or [bold]skillhub list[/]")
+            raise typer.Exit(1)
+
+    console.print(f"\n[bold]Adding[/] [cyan]{name}[/]...\n")
+
+    # Install first
+    try:
+        installed = _install(name, agent=agent, all_agents=all_agents, overwrite=True)
+    except (ValueError, RuntimeError) as e:
+        console.print(f"[red]Error:[/] {e}")
+        raise typer.Exit(1)
+
+    for tgt, path in installed.items():
+        rel = path.relative_to(Path.cwd()) if path.is_absolute() else path
+        console.print(f"  [green]✓[/] {AGENT_LABELS.get(tgt, tgt)} → [dim]{rel}[/]")
+
+    # Update manifest
+    if not no_install:
+        mp = manifest_path()
+        created = not mp.exists()
+        add_to_manifest(name)
+        if created:
+            console.print("\n[green]✓[/] Created [bold]skillhub.json[/] — commit it so teammates run [bold]skillhub install[/]")
+        else:
+            console.print(f"\n[green]✓[/] Added [bold]{name}[/] to skillhub.json")
+
+    console.print()
+
+
+@app.command()
+def lock(
+    agent: str = _agent_option(),
+):
+    """
+    Pin all currently installed skills into skillhub.json.
+
+    Useful to record an existing setup without having used `skillhub add`.
+
+    Example:
+      skillhub lock
+    """
+    from .manifest import lock_manifest, manifest_path
+
+    mp = manifest_path()
+    created = not mp.exists()
+    data = lock_manifest(agent=agent)
+    skill_count = len(data.get("skills", {}))
+
+    if skill_count == 0:
+        console.print("[yellow]No installed skills found to lock.[/]")
+        console.print("Install skills first: [bold]skillhub install python-patterns[/]")
+        raise typer.Exit(1)
+
+    action = "Created" if created else "Updated"
+    console.print(f"\n[green]✓[/] {action} [bold]skillhub.json[/] with {skill_count} skill(s):\n")
+    for skill_name, version in data["skills"].items():
+        console.print(f"  [cyan]{skill_name}[/] [dim]{version}[/]")
+    console.print("\n[dim]Commit skillhub.json so teammates run [bold]skillhub install[/] to reproduce this setup.[/]\n")
 
 
 @app.command()
@@ -538,6 +655,116 @@ def templates():
     console.print(table)
     console.print("\n[dim]Use a template:[/]  [bold]skillhub compose --template fastapi-expert[/]")
     console.print("[dim]With AI merge:[/]   [bold]skillhub compose --template fastapi-expert --strategy ai[/]\n")
+
+
+@app.command()
+def optimize(
+    agent: str = _agent_option(),
+    output: str = typer.Option("optimized", "--output", "-o", help="Name for the optimized bundle skill"),
+    no_install: bool = typer.Option(False, "--no-install", help="Print stats only, don't write the bundle"),
+):
+    """
+    Deduplicate installed skills into a lean, token-efficient bundle.
+
+    Solves "context rot": loading all skills wastes tokens on repeated sections
+    (Error Handling, When to Use, Code Review — appear in every skill).
+    skillhub optimize deduplicates them and writes a single optimized file.
+
+    Example:
+      skillhub optimize
+      skillhub optimize --output team-bundle
+    """
+    from .optimize import optimize as _optimize
+
+    console.print(f"\n[bold]Optimizing skills for[/] {AGENT_LABELS.get(agent, agent)}...\n")
+
+    try:
+        _bundle, original_tokens, optimized_tokens, duplicates = _optimize(
+            agent=agent,
+            output_name=output,
+            install=not no_install,
+        )
+    except FileNotFoundError as e:
+        console.print(f"[yellow]{e}[/]")
+        console.print("Install skills first: [bold]skillhub install python-patterns[/]")
+        raise typer.Exit(1)
+    except ValueError as e:
+        console.print(f"[red]Error:[/] {e}")
+        raise typer.Exit(1)
+
+    saved = original_tokens - optimized_tokens
+    pct = int(saved / original_tokens * 100) if original_tokens else 0
+
+    console.print(f"  Original:  [dim]{original_tokens:,} tokens[/]")
+    console.print(f"  Optimized: [green]{optimized_tokens:,} tokens[/]  [bold green](-{pct}%, -{saved:,} tokens)[/]")
+
+    if duplicates:
+        console.print(f"\n  [dim]Duplicate sections merged ({len(duplicates)} found):[/]")
+        for heading, count in sorted(duplicates.items(), key=lambda x: -x[1])[:8]:
+            console.print(f"    [yellow]⊕[/] {heading} [dim](in {count} skills)[/]")
+
+    if not no_install:
+        path = Path(AGENT_PATHS.get(agent, ".claude/commands/")) / f"{output}.md"
+        console.print(f"\n[green]✓[/] Written to [bold]{path}[/]")
+        console.print(f"  [dim]→ In Claude Code, type [bold]/{output}[/] to load the optimized bundle.[/]")
+    console.print()
+
+
+@app.command()
+def bridge(
+    direction: str = typer.Argument(..., help="'from' or 'to'"),
+    path: Path = typer.Option(Path("AGENTS.md"), "--file", "-f", help="Path to AGENTS.md"),
+    agent: str = _agent_option(),
+):
+    """
+    Convert between AGENTS.md (Codex) and SKILL.md (Claude/Cursor/Gemini).
+
+    60,000+ repos use AGENTS.md. skillhub bridge lets you share skills
+    across ecosystems without rewriting them.
+
+    Examples:
+      skillhub bridge from              # import AGENTS.md → Claude skills
+      skillhub bridge to                # pack Claude skills → AGENTS.md
+      skillhub bridge from --file team/AGENTS.md
+    """
+    from .bridge import from_agents_md, to_agents_md
+
+    if direction not in ("from", "to"):
+        console.print("[red]direction must be 'from' or 'to'[/]")
+        console.print("  [bold]skillhub bridge from[/]  — import AGENTS.md into skill files")
+        console.print("  [bold]skillhub bridge to[/]    — pack skill files into AGENTS.md")
+        raise typer.Exit(1)
+
+    if direction == "from":
+        console.print(f"\n[bold]Importing[/] [cyan]{path}[/] → {AGENT_LABELS.get(agent, agent)} skills...\n")
+        try:
+            installed = from_agents_md(path, agent=agent)
+        except FileNotFoundError as e:
+            console.print(f"[red]Error:[/] {e}")
+            raise typer.Exit(1)
+
+        for skill_name in installed:
+            agent_path = AGENT_PATHS.get(agent, ".claude/commands/")
+            dest = f"{agent_path}{skill_name}.md"
+            console.print(f"  [green]✓[/] {skill_name} → [dim]{dest}[/]")
+
+        console.print(f"\n[green]Done![/] {len(installed)} skill(s) imported from {path}")
+        if agent == "claude" and installed:
+            console.print(f"  [dim]→ In Claude Code, type [bold]/{installed[0]}[/] to use it.[/]")
+
+    else:  # direction == "to"
+        console.print(f"\n[bold]Packing[/] {AGENT_LABELS.get(agent, agent)} skills → [cyan]{path}[/]...\n")
+        try:
+            count = to_agents_md(path, agent=agent)
+        except (FileNotFoundError, ValueError) as e:
+            console.print(f"[red]Error:[/] {e}")
+            raise typer.Exit(1)
+
+        console.print(f"[green]✓[/] Packed {count} skill(s) into [bold]{path}[/]")
+        console.print("  [dim]→ Codex will read them automatically.[/]")
+        console.print("  [dim]→ Skills wrapped in skillhub markers — safe to run again.[/]")
+
+    console.print()
 
 
 @app.command(name="init")
