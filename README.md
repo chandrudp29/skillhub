@@ -13,7 +13,7 @@ Merge skills from any ecosystem into one expert skill — with AI-powered confli
 
 [![Ecosystems](https://img.shields.io/badge/🌐_ecosystems-13-6366f1?style=flat-square)](#the-13-ecosystems)
 [![Agents](https://img.shields.io/badge/🤝_agents-4-0066cc?style=flat-square)](#install-to-any-agent)
-[![Skills](https://img.shields.io/badge/📦_skills-26-22c55e?style=flat-square)](#available-skills-26)
+[![Skills](https://img.shields.io/badge/📦_skills-34-22c55e?style=flat-square)](#available-skills-34)
 [![Compose](https://img.shields.io/badge/🔀_only_tool_that_merges-skills-f59e0b?style=flat-square)](#compose)
 
 ```bash
@@ -406,7 +406,7 @@ skillhub publish <path>                    # PR to registry
 
 ---
 
-## Available Skills (26)
+## Available Skills (34)
 
 <details>
 <summary><b>Browse all 26 skills</b></summary>
@@ -461,6 +461,26 @@ skillhub publish <path>                    # PR to registry
 |-------|-------------|
 | `yc-job-tracker` | Daily AI/ML job tracking at YC startups |
 | `career-ops` | Global AI/ML job hunt — USA, Europe, Singapore, Dubai |
+
+### Web & Frontend
+| Skill | Description |
+|-------|-------------|
+| `typescript-patterns` | Strict types, utility types, generics, discriminated unions, branded types |
+| `nextjs-patterns` | App Router, Server Components, data fetching, caching, streaming |
+
+### Architecture & Infrastructure
+| Skill | Description |
+|-------|-------------|
+| `system-design` | RESDAC framework, scalability patterns, database selection, CAP trade-offs |
+| `cicd-agent` | GitHub Actions, secrets, blue-green/canary/rolling deploys, release automation |
+| `kubernetes-agent` | Manifests, resource sizing, HPA, health probes, networking, troubleshooting |
+| `data-pipeline` | Idempotency, incremental loads, Airflow DAGs, data quality checks |
+
+### Performance & APIs
+| Skill | Description |
+|-------|-------------|
+| `performance-optimizer` | Profiling methodology, Python bottlenecks, N+1 fixes, caching strategy |
+| `openai-patterns` | Model selection, structured outputs, function calling, retry logic, cost control |
 
 ### Community (via agency-agents)
 | Skill | Description |

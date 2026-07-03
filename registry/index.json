@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
-  "updated_at": "2026-07-02",
+  "version": "1.2.0",
+  "updated_at": "2026-07-03",
   "skills": [
     {
       "name": "agent-builder",
@@ -802,6 +802,169 @@
         "founding engineer"
       ],
       "author": "chandrudp29"
+    },
+    {
+      "name": "typescript-patterns",
+      "display_name": "TypeScript Patterns",
+      "description": "Modern TypeScript best practices \u2014 strict types, utility types, generics, discriminated unions, branded types, and build tooling.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "typescript",
+        "javascript",
+        "types",
+        "frontend",
+        "backend"
+      ],
+      "author": "skillhub"
+    },
+    {
+      "name": "nextjs-patterns",
+      "display_name": "Next.js Patterns",
+      "description": "Production Next.js 14+ patterns \u2014 App Router, Server Components, data fetching, caching, performance, and deployment.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "nextjs",
+        "react",
+        "typescript",
+        "frontend",
+        "fullstack"
+      ],
+      "author": "skillhub"
+    },
+    {
+      "name": "system-design",
+      "display_name": "System Design",
+      "description": "Production system design \u2014 RESDAC framework, scalability patterns, database selection, caching strategy, and trade-off analysis.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "system-design",
+        "architecture",
+        "scalability",
+        "distributed-systems",
+        "backend"
+      ],
+      "author": "skillhub"
+    },
+    {
+      "name": "cicd-agent",
+      "display_name": "CI/CD Agent",
+      "description": "CI/CD pipeline design \u2014 GitHub Actions, secrets management, caching, deployment strategies (blue-green, canary, rolling), and release automation.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "cicd",
+        "github-actions",
+        "devops",
+        "deployment",
+        "automation"
+      ],
+      "author": "skillhub"
+    },
+    {
+      "name": "kubernetes-agent",
+      "display_name": "Kubernetes Agent",
+      "description": "Kubernetes production patterns \u2014 manifests, resource sizing, health probes, HPA, secrets, networking, and troubleshooting.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "kubernetes",
+        "k8s",
+        "devops",
+        "containers",
+        "cloud",
+        "infrastructure"
+      ],
+      "author": "skillhub"
+    },
+    {
+      "name": "performance-optimizer",
+      "display_name": "Performance Optimizer",
+      "description": "Systematic performance profiling \u2014 measure-first methodology, Python profiling tools, N+1 fixes, caching, database optimization.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "performance",
+        "profiling",
+        "optimization",
+        "python",
+        "backend"
+      ],
+      "author": "skillhub"
+    },
+    {
+      "name": "data-pipeline",
+      "display_name": "Data Pipeline",
+      "description": "Production data pipeline patterns \u2014 idempotency, incremental loads, Airflow DAGs, data quality checks, and pipeline monitoring.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "data-engineering",
+        "etl",
+        "pipeline",
+        "airflow",
+        "python",
+        "analytics"
+      ],
+      "author": "skillhub"
+    },
+    {
+      "name": "openai-patterns",
+      "display_name": "OpenAI Patterns",
+      "description": "Production OpenAI API patterns \u2014 model selection, structured outputs, function calling, streaming, retry logic, and cost control.",
+      "version": "1.0.0",
+      "agents": [
+        "claude",
+        "cursor",
+        "codex",
+        "gemini"
+      ],
+      "tags": [
+        "openai",
+        "gpt",
+        "llm",
+        "ai",
+        "api",
+        "function-calling"
+      ],
+      "author": "skillhub"
     }
   ]
 }
